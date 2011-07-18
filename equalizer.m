@@ -23,8 +23,8 @@ Ft = FS/samples * [1:samples] ;
 Eq = ppval( eq_spar , Ft )' ;
 % 
 % 
-semilogy ( Ft , Eq ) ;
-grid on ;
+% semilogy ( Ft , Eq ) ;
+% grid on ;
 % return ;
 
 for i=1:channels
