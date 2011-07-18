@@ -23,7 +23,7 @@ Ft = FS/samples * [1:samples] ;
 Eq = ppval( eq_spar , Ft )' ;
 % 
 % 
-plot ( Ft , Eq ) ;
+semilogy ( Ft , Eq ) ;
 grid on ;
 % return ;
 
@@ -32,7 +32,7 @@ for i=1:channels
     Y_eq(:,i) = ifft( Y_eq(:,i) ) ;
 end
 
-
+Y_eq = real( Y_eq ) ;
 
 end
 

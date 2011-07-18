@@ -18,6 +18,7 @@ ls_min = min( logS(l) ) ;
 
 logS = ( logS - ls_min ) / ( ls_max - ls_min ) ;
 
+figure(1) ;
 for i=1:ch
     subplot( ch , 1 , i ) ;
     pcolor( time(1:n) , freq(r) , logS(1:n,r,i)' ) ;
