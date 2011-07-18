@@ -51,11 +51,11 @@ for j=1:n
         p = p + 1 ;
     end
     
-    time_sf(j,:,:) = s_f ;
+    time_sf(j,:,:) = gather( s_f ) ;
     start_sample = start_sample + samples_nr ;
 end
 
-peak = max( m ) ;
+peak = gather( max( m ) ) ;
 freq = ( FS / samples_nr ) * [0:(samples_nr-1)] ;
 
 end
