@@ -3,25 +3,30 @@ function [ Y ] = noise( time , FS , n_type , ch , varargin )
 %   Detailed explanation goes here
 
 p = inputParser ;
-p.addOptional('gain_dB', realmax('double') ) ;
-p.addOptional('gain_lin', realmax('double') ) ;
+gain_def = -6 ;
+gain_def_lin = 10^(gain_def/20) ;
+
+p.addOptional('gain_dB', gain_def , @(x)isnumeric(x) && x <= 0 ) ;
+
+p.addOptional('gain_lin', gain_def_lin , @(x)isnumeric(x) ... 
+    && x <= 1 && x >= 0 ) ;
+
 p.addOptional('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ... 
     strcmpi(x,'normal') ) ;
+
 p.addOptional('sigma' , 0.2 , @(x)isnumeric(x) && x <= 0.81 && x > 0 ) ;
 
 p.parse(varargin{:});
 
 
-if p.Results.gain_dB == realmax('double') 
-    gain = 0.5 ;
-else
+gain = gain_def_lin ;
+
+if p.Results.gain_dB ~= gain_def 
     gain = 10^( p.Results.gain_dB / 20 ) ;
 end
 
-if p.Results.gain_lin == realmax('double') 
-    gain = 0.5 ;
-else
-    gain = p.Results.gain_lin / 20 ;
+if p.Results.gain_lin ~= gain_def_lin
+    gain = p.Results.gain_lin ;
 end
 
 
