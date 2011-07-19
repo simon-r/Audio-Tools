@@ -1,6 +1,32 @@
 function [ Y ] = noise( time , FS , n_type , ch , varargin )
-%UNTITLED6 Summary of this function goes here
-%   Detailed explanation goes here
+%
+%function [ Y ] = noise( time , FS , n_type , ch , varargin )
+%
+%   return a random noise.
+%
+% Arguments:
+%   time: noise duration in seconds
+%   FS: sampling freq.
+%   n_type: noise type; must be 'white', 'pink' or 'brownian'
+%   ch: number of channels
+%   
+% Otional parameters:
+%   'gain_dB' : set the gain in dB (the default value is -6 dB)
+%   'gain_lin' : set the linear gain
+%   'rand_gen' : random generator must be 'uniform' (default) or 'normal'
+%   'sigma' : the sigma for the nornal rand generator (defaul: 0.2)
+%   'remove_brownian_bass' : remove the very low bass freq. from the
+%                            brownian noise (default: 'yes' )
+%        DANGER:    in the BROWNIAN noise there are a lot of very low and powerful
+%                   bass that should damage your audio tools.
+%                   by default these bass are removed, but if you set to
+%                   'no' the option 'remove_brownian_bass' they are not
+%                   removed.
+%
+% Examples:
+% Y = noise( 10 , 44100 , 'pink' , 1 ) 
+% Y = noise( 10 , 44100 , 'brownian', 1 , 'rand_gen' , 'normal' , 'sigma' , 0.4 ) ;
+%
 
 p = inputParser ;
 gain_def = -6 ;
@@ -15,6 +41,9 @@ p.addOptional('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ...
     strcmpi(x,'normal') ) ;
 
 p.addOptional('sigma' , 0.2 , @(x)isnumeric(x) && x <= 0.81 && x > 0 ) ;
+
+p.addOptional('remove_brownian_bass', 'yes' , @(x)strcmpi(x,'yes') || ... 
+    strcmpi(x,'no') ) ;
 
 p.parse(varargin{:});
 
@@ -75,8 +104,12 @@ elseif strcmpi(n_type,'brownian')
     m = stereo_max( Y ) ;
     Y = Y * 1/m ;
     
-    F = [0 15 20  20000 22000] ; 
-    dB = [ -200 -100 0 0 -100] ;
+    F = [0 10 15  20000 22000] ; 
+    if strcmpi( p.Results.remove_brownian_bass , 'yes' )
+        dB = [ -200 -100 0 0 -100] ;
+    else
+        dB = [ 0 0 0 0 -100] ;
+    end
     
     Y  = equalizer( Y , FS , F , dB ) ;
     
