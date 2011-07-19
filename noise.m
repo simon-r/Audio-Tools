@@ -18,6 +18,8 @@ if strcmpi(n_type,'white')
         dB(size(F,2)) = -60 ;
     end
     
+    Y  = equalizer( Y , FS , F , dB ) ;
+    
 elseif strcmpi(n_type,'pink')
         
     f_max = FS / 2 - 40 ;
@@ -25,12 +27,30 @@ elseif strcmpi(n_type,'pink')
     
     dB = (-60 / f_max ) * F ;
     
+    Y  = equalizer( Y , FS , F , dB ) ;
+    
+elseif strcmpi(n_type,'brownian')
+    
+    for i = 2:size(Y,1)
+        Y(i,:) = Y(i-1,:) + Y(i,:) ;
+    end
+    
+    m = stereo_max( Y , ch ) ;
+    Y = Y * 1/m ;
     
 else
     error('error: noise type not allowed') ;
 end
 
- Y  = equalizer( Y , FS , F , dB ) ;
-    
 end
 
+
+
+function m = stereo_max( X , channels )
+
+for i = 1:channels
+    mv(i) = max ( abs( X(:,i) ) ) ;
+end
+
+m = max( mv ) ;
+end

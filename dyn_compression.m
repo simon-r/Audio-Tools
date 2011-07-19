@@ -40,7 +40,7 @@ end
 function m = stereo_max( X , channels )
 
 for i = 1:channels
-    mv(i) = max ( abs( X(:,2) ) ) ;
+    mv(i) = max ( abs( X(:,i) ) ) ;
 end
 
 m = max( mv ) ;
