@@ -27,8 +27,8 @@ for i=1:channels
     com_music(:,i) = ppval(spl,Y(:,i))' ;
 end
 
-Y_mabs = stereo_max( Y , channels ) ;
-C_mabs = stereo_max( com_music , channels ) ;
+Y_mabs = stereo_max( Y ) ;
+C_mabs = stereo_max( com_music ) ;
 
 com_music = com_music * ( Y_mabs / C_mabs ) ;
 
@@ -37,12 +37,12 @@ c_fy = ppval(spl,c_fx)' ;
 
 end
 
-function m = stereo_max( X , channels )
-
-for i = 1:channels
-    mv(i) = max ( abs( X(:,i) ) ) ;
-end
-
-m = max( mv ) ;
-end
+% function m = stereo_max( X , channels )
+% 
+% for i = 1:channels
+%     mv(i) = max ( abs( X(:,i) ) ) ;
+% end
+% 
+% m = max( mv ) ;
+% end
 
