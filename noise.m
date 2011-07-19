@@ -5,8 +5,8 @@ function [ Y ] = noise( time , FS , n_type , ch , varargin )
 p = inputParser ;
 p.addOptional('gain_dB', realmax('double') ) ;
 p.addOptional('gain_lin', realmax('double') ) ;
-p.addOptional('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ...
-    @(x)strcmpi(x,'normal') ) ;
+p.addOptional('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ... 
+    strcmpi(x,'normal') ) ;
 p.addOptional('sigma' , 0.2 , @(x)isnumeric(x) && x <= 0.81 && x > 0 ) ;
 
 p.parse(varargin{:});
@@ -69,6 +69,11 @@ elseif strcmpi(n_type,'brownian')
     
     m = stereo_max( Y , ch ) ;
     Y = Y * 1/m ;
+    
+    F = [0 15 20  20000 22000] ; 
+    dB = [ -200 -100 0 0 -100] ;
+    
+    Y  = equalizer( Y , FS , F , dB ) ;
     
 else
     error('error: noise type not allowed') ;
