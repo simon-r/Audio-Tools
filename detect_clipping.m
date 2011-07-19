@@ -34,7 +34,7 @@ for ch=1:size(Y,2)
             clip_begin = i ;
             clip_sign = sign(Y(i,ch)) ;
             
-        elseif clip_flag && ( Y(i,ch) < level & Y(i,ch) > -level )
+        elseif clip_flag && ( Y(i,ch) < level && Y(i,ch) > -level )
             
             clip_flag = false ;
             
