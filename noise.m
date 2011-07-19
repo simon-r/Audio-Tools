@@ -67,7 +67,7 @@ elseif strcmpi(n_type,'brownian')
         Y(i,:) = Y(i-1,:) + Y(i,:) ;
     end
     
-    m = stereo_max( Y , ch ) ;
+    m = stereo_max( Y ) ;
     Y = Y * 1/m ;
     
     F = [0 15 20  20000 22000] ; 
@@ -85,12 +85,3 @@ Y = gain_set( Y , FS , gain , 'lin' ) ;
 end
 
 
-
-function m = stereo_max( X , channels )
-
-for i = 1:channels
-    mv(i) = max ( abs( X(:,i) ) ) ;
-end
-
-m = max( mv ) ;
-end
