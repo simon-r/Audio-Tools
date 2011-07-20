@@ -18,8 +18,8 @@ function [ Y samples time ] = noise( time , FS , n_type , ch , varargin )
 %   'remove_brownian_bass' : remove the very low bass freq. from the
 %                            brownian noise (default: 'yes' )
 %        DANGER:    in the BROWNIAN noise there are a lot of very low and powerful
-%                   bass that should damage your audio tools.
-%                   by default these bass are removed, but if you set to
+%                   bass that should damage your audio devices.
+%                   by default these basses are removed, but if you set to
 %                   'no' the option 'remove_brownian_bass' they are not
 %                   removed.
 %
