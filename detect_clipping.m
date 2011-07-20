@@ -1,9 +1,15 @@
 function [ C clip_cnt ] = detect_clipping( Y , FS , level_dB )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-% C [ ch s_begin s_end t_begin t_end clip_sign ]
-p = inputParser ;
-
+%function [ C clip_cnt ] = detect_clipping( Y , FS , level_dB )
+%   return a ( clip by 6 ) matrix that stores all clipping intervals
+%
+% Matrix format:
+% C [ chanel sample_begin sample_end time_begin time_end clip_sign ]
+%
+% Arguments:
+% Y : Audio trak
+% FS : samplig freq.
+% level_dB : clipping level in dB
+%
 
 if level_dB > 0
     error( 'error: the clipping level must be less or equal than 0.' )

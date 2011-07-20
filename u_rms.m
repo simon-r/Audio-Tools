@@ -19,5 +19,7 @@ r = start_sample:end_sample ;
 res = sqrt ( sum( Y(r,:).^2 / size( Y(r,:),1) ) ) ;
 dB = 20 * log10( res / ref  ) ;
 
+
+
 end
 
