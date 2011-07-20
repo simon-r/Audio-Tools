@@ -1,4 +1,4 @@
-function [ D ] = echo( Y , FS , varargin )
+function [ D ] = echo_effect( Y , FS , varargin )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -13,32 +13,70 @@ p.addParamValue('repetitons', 1 , @(x)isnumeric(x) && x > 0 ) ;
 p.addParamValue('rep_attenuation', -6 , @(x)isnumeric(x) && x <= 0 ) ;
 
 p.addParamValue('echo_type', 'normal' , @(x)strcmpi(x,'peak') || ... 
-    strcmpi(x,'normal') || strcmpi(x,'ramp') ) ;
+    strcmpi(x,'normal') || strcmpi(x,'ramp') || strcmpi(x,'rand_peaks') ) ;
 
-p.addParamValue('rep_attenuation', -6 , @(x)isnumeric(x) && x <= 0 ) ;
+p.addParamValue('sigma', 0.0003 , @(x)isnumeric(x) ) ;
+p.addParamValue('gain', 1 , @(x)isnumeric(x) ) ;
 
 p.parse( Y, FS, varargin{:} );
 
 delay = p.Results.delay ;
-echo_type = p:Results.echo_type ;
+echo_type = p.Results.echo_type ;
 
-sigma = 0.0003 ;
-gain = 1 ;
+sigma = p.Results.sigma ;
+gain = p.Results.gain ;
+rep = p.Results.repetitons ;
+rep_att = p.Results.rep_attenuation ;
 
 t = 1/FS ;
 
-c_time = delay * 2 ;
-C = -c_time:t:c_time ;
+
 
 if strcmpi(echo_type,'normal')
+    
+    c_time = delay * 2 ;
+    C = -c_time:t:c_time ;
+    
     X = normpdf( C , delay , sigma ) * (sigma*sqrt(2*pi)) ;
     X = X / sum( X ) * gain ;
     X(floor(size(C,2)/2)) = 1 ;
-elseif strcmpi(echo_type,'normal')
     
-    X(floor(size(C,2)/2)) = 1 ;
+elseif strcmpi(echo_type,'peak')
+    
+    X = zeros( 1 , 2*floor( (rep*delay)/t ) ) ;
+    
+    dd = floor( delay / t ) ;
+    dh = dd ;
+    
+    for i=1:rep
+        X(dh+i*dd) = gain ;
+        gain = gain * 10^(rep_att/20) ;
+    end
+    
+    X(dh) = 1 ;
+    
+elseif strcmpi(echo_type,'ramp')
+    
+    X = zeros( 1 , 2*floor( (rep*delay)/t ) ) ;
+    
+    dd = floor( delay / t ) ;
+    dh = floor( size(X,2) / 2 ) ;
+    
+    b = 100 ;
+    delta = -0.01 ;
+    C = exp(b:delta:0)/exp(b) ;
+    
+    Cs = size( C , 2 ) ;
+    
+    X(dh+dd+1:dh+dd+Cs) = C * gain ;
+    
+    sX = size( X , 2 ) ;
+    X(dh) = 1 ;
+    X = X(sX:-1:1) ;
+    
+elseif strcmpi(echo_type,'rand_peak')   
+    
 end
-
 
 
 sizeY = size(Y) ;
