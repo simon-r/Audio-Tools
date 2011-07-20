@@ -55,6 +55,9 @@ elseif strcmpi(echo_type,'peak')
     
     X(dh) = 1 ;
     
+%     sX = size( X , 2 ) ;
+%     X = X(sX:-1:1) ;
+    
 elseif strcmpi(echo_type,'ramp')
     
     X = zeros( 1 , 2*floor( (rep*delay)/t ) ) ;
@@ -74,17 +77,29 @@ elseif strcmpi(echo_type,'ramp')
     X(dh) = 1 ;
     X = X(sX:-1:1) ;
     
-elseif strcmpi(echo_type,'rand_peak')   
+elseif strcmpi(echo_type,'rand_peaks')   
     
+    X = zeros( 1 , 2*floor( (rep*delay)/t ) ) ;
+    
+    dd = floor( delay / t ) ;
+    dh = floor( size(X,2) / 2 ) ;
+    
+    indx = dh + floor(100*rand(1,100)) ;
+    val = rand(1,100) * gain ;
+    
+    X(indx) = val ;
+    
+    X(dh) = 1 ;
 end
 
 
 sizeY = size(Y) ;
 
-D = zeros( sizeY ) ;
+sX = size( X , 2 ) ;
+D = zeros( sizeY(1) + sX - 1 , sizeY(2) ) ;
 
 for ch=1:sizeY(2) 
-    D(:,ch) = conv( Y(:,ch) , X , 'same' ) ;
+    D(:,ch) = conv( Y(:,ch) , X ) ;
 end
 
 my = stereo_max( Y ) ; 
