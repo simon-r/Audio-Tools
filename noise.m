@@ -1,4 +1,4 @@
-function [ Y ] = noise( time , FS , n_type , ch , varargin )
+function [ Y samples time ] = noise( time , FS , n_type , ch , varargin )
 %
 %function [ Y ] = noise( time , FS , n_type , ch , varargin )
 %
@@ -32,17 +32,17 @@ p = inputParser ;
 gain_def = -6 ;
 gain_def_lin = 10^(gain_def/20) ;
 
-p.addOptional('gain_dB', gain_def , @(x)isnumeric(x) && x <= 0 ) ;
+p.addParamValue('gain_dB', gain_def , @(x)isnumeric(x) && x <= 0 ) ;
 
-p.addOptional('gain_lin', gain_def_lin , @(x)isnumeric(x) ... 
+p.addParamValue('gain_lin', gain_def_lin , @(x)isnumeric(x) ... 
     && x <= 1 && x >= 0 ) ;
 
-p.addOptional('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ... 
+p.addParamValue('rand_gen', 'uniform' , @(x)strcmpi(x,'uniform') || ... 
     strcmpi(x,'normal') ) ;
 
-p.addOptional('sigma' , 0.2 , @(x)isnumeric(x) && x <= 0.81 && x > 0 ) ;
+p.addParamValue('sigma' , 0.2 , @(x)isnumeric(x) && x <= 0.81 && x > 0 ) ;
 
-p.addOptional('remove_brownian_bass', 'yes' , @(x)strcmpi(x,'yes') || ... 
+p.addParamValue('remove_brownian_bass', 'yes' , @(x)strcmpi(x,'yes') || ... 
     strcmpi(x,'no') ) ;
 
 p.parse(varargin{:});
@@ -119,6 +119,7 @@ end
 
 
 Y = gain_set( Y , FS , gain , 'lin' ) ;
+time = samples*t ;
 
 end
 

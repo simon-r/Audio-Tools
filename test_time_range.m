@@ -11,7 +11,7 @@ function [ start_sample end_sample ] = test_time_range( time_range , t , sizeY )
         error('error: the values in time range must be positives') ;
     end
     
-    start_sample = floor( time_range(1) / t ) ;
+    start_sample = floor( time_range(1) / t ) + 1 ;
     end_sample = floor( time_range(2) / t ) ;
 else
     start_sample = 1 ;

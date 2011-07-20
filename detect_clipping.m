@@ -5,7 +5,7 @@ function [ C clip_cnt ] = detect_clipping( Y , FS , level_dB )
 p = inputParser ;
 
 
-if level_dB > 0 
+if level_dB > 0
     error( 'error: the clipping level must be less or equal than 0.' )
 end
 
@@ -45,7 +45,7 @@ for ch=1:size(Y,2)
             C(clip_cnt,5) = (i-1)*t ;
             C(clip_cnt,6) = clip_sign ;
             
-            if clip_cnt >= sz 
+            if clip_cnt >= sz
                 C = [C ; zeros(step,6)] ;
                 sz = size(C,1) ;
             end
@@ -53,6 +53,20 @@ for ch=1:size(Y,2)
         end
         
     end
+    
+    if clip_flag
+        C(clip_cnt,1) = ch ;
+        C(clip_cnt,2) = clip_begin ;
+        C(clip_cnt,3) = i-1 ;
+        C(clip_cnt,4) = clip_begin*t ;
+        C(clip_cnt,5) = (i-1)*t ;
+        C(clip_cnt,6) = clip_sign ;
+        if clip_cnt >= sz
+            C = [C ; zeros(step,6)] ;
+            sz = size(C,1) ;
+        end
+    end
+    
 end
 
 C = C(1:clip_cnt,:) ;
