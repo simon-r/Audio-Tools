@@ -3,7 +3,7 @@ function [ output_args ] = plot_audio_time_fft(  Y , FS , time_range , n , varar
 %   Detailed explanation goes here
 
 p = inputParser ;
-p.addOptional( 'freq_limit' , 22050 , @(x)isnumeric(x) ) ;
+p.addOptional( 'freq_limit' , max_freq() , @(x)isnumeric(x) ) ;
 p.parse( varargin{:} );
 
 freq_limit = p.Results.freq_limit ;
