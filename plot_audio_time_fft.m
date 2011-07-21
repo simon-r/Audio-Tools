@@ -1,13 +1,20 @@
-function [ output_args ] = plot_audio_time_fft(  Y , FS , time_range , n )
+function [ output_args ] = plot_audio_time_fft(  Y , FS , time_range , n , varargin )
 %UNTITLED4 Summary of this function goes here
 %   Detailed explanation goes here
 
+p = inputParser ;
+p.addOptional( 'freq_limit' , 22050 , @(x)isnumeric(x) ) ;
+p.parse( varargin{:} );
+
+freq_limit = p.Results.freq_limit ;
 
 ch = size(Y,2) ;
 
 [S freq time peak nr] = audio_time_fft( Y , FS , time_range , n , 20 ) ;
 
-r = floor(size(S,2)/2):-1:1 ;
+%r = floor(size(S,2)/2):-1:1 ;
+
+r = find ( freq < freq_limit ) ;
 
 % max_f = max( freq(r) ) ;
 
