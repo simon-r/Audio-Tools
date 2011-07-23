@@ -71,8 +71,6 @@ elseif strcmpi( p.Results.rand_gen , 'normal' )
     Y(Y>1) = 1 ;
 end
 
-
-
 if strcmpi(n_type,'white')
     
     if FS <= 50000
