@@ -2,12 +2,12 @@ classdef AudioTrack
     %UNTITLED2 Summary of this class goes here
     %   Detailed explanation goes here
     
-    properties ( SetAccess = public )
-        Y
+    properties ( SetAccess = public , GetAccess = public )
+        Y ;
         Fs = 44100 ;
     end
     
-    properties (Dependent = true, SetAccess = private)
+    properties (Dependent = true, SetAccess = private , GetAccess = public)
         time
         channels
         samples
