@@ -3,12 +3,12 @@ function [ Y t_vect ] = frequency_sweep( FS , f_min , f_max , time , varargin )
 %   Detailed explanation goes here
 
 p = inputParser ;
-p.addParamValue( 'waveform', 'sin' , @(x)strcmpi(x,'sine') || ... 
+p.addParamValue( 'waveform', 'sin' , @(x)strcmpi(x,'sin') || ... 
     strcmpi(x,'triangle') || ...
     strcmpi(x,'square') || ... 
     strcmpi(x,'sawtooth') ) ;
 
-p.addParamValue('gain', -6 , @(x)isnumeric(x) && x <= 0 ) ;
+p.addParamValue('gain', -10 , @(x)isnumeric(x) && x <= 0 ) ;
 
 p.parse(varargin{:});
 
