@@ -1,22 +1,18 @@
-function [ Y ] = gain_set( Y , FS , gain , mode , varargin )
+function [ Y ] = gain_set( Y , FS , gain , g_mode , varargin )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
-% p = inputParser ;
-% p.addRequired('gain', 0 ) ;
-% p.addRequired('gain_mode', 'lin' , @(x)strcmpi(x,'lin') || @(x)strcmpi(x,'dB') ) ;
-%
-% p.parse(varargin{:});
-
 p = inputParser ;
+
 p.addOptional('time_range', [-1 0] ) ;
 
-p.parse(varargin{:});
+p.parse( varargin{:} );
+
 time_range = p.Results.time_range ;
 
-if strcmpi(mode,'lin')
+if strcmpi(g_mode,'lin')
     g = gain ;
-elseif strcmpi(mode,'dB')
+elseif strcmpi(g_mode,'dB')
     g = 10^(gain/20) ;
 else
     error('error: invalid gain mode; admitted values are "lin" or "dB" ') ;
