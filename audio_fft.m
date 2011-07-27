@@ -11,7 +11,7 @@ smooth = 30 ;
 
 t = 1/FS ;
 
-t_begin = floor( time_range(1) / t ) ;
+t_begin = floor( time_range(1) / t ) + 1 ;
 t_end = floor(  time_range(2) / t ) ;
 
 s = Y(t_begin:t_end,:) ;
