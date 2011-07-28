@@ -65,6 +65,14 @@ classdef AudioTrack < hgsetget
             wavwrite( at.Y , at.Fs , at.nbits , file_name ) ;
         end
         
+        function plot_audio_fft( at , time_range , varargin )
+            plot_audio_fft( at.Y , at.Fs , time_range , varargin{:} ) ;
+        end
+
+        function plot_audio_time_fft( at , time_range , n , varargin )
+            plot_audio_time_fft(  at.Y , at.Fs , time_range , n , varargin{:} )
+        end 
+        
         function play( at )
             at.player = audioplayer( at.Y , at.Fs ) ; 
             play ( at.player ) ;

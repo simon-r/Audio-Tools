@@ -4,9 +4,11 @@ function [ output_args ] = plot_audio_time_fft(  Y , FS , time_range , n , varar
 
 p = inputParser ;
 p.addOptional( 'freq_limit' , max_freq() , @(x)isnumeric(x) ) ;
+p.addOptional( 'freq_min' , min_freq() , @(x)isnumeric(x) ) ;
 p.parse( varargin{:} );
 
 freq_limit = p.Results.freq_limit ;
+freq_min = p.Results.freq_min ;
 
 ch = size(Y,2) ;
 
@@ -14,7 +16,7 @@ ch = size(Y,2) ;
 
 %r = floor(size(S,2)/2):-1:1 ;
 
-r = find ( freq < freq_limit ) ;
+r = find ( freq <= freq_limit & freq >= freq_min ) ;
 
 % max_f = max( freq(r) ) ;
 
