@@ -5,7 +5,7 @@ classdef AudioTrack < hgsetget
     properties ( SetAccess = public , GetAccess = public )
         Y ;
         Fs = 44100 ;
-        nbits ;
+        nbits = 16 ;
     end
     
     properties ( Dependent = true, SetAccess = private , GetAccess = public )
@@ -58,13 +58,19 @@ classdef AudioTrack < hgsetget
                 [ at.Y at.Fs at.nbits ] = mp3read( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.flac$', 'once' ) ) )
                 [ at.Y at.Fs at.nbits ] = flacread2( file_name ) ;
+            elseif not ( isempty( regexp( file_name , '\.ogg$', 'once' ) ) )
+                [ at.Y at.Fs at.nbits ] = oggread( file_name ) ;
             end
         end
 
         function noise( at , time , FS , n_type , ch , varargin )
             at.Y = noise( time , FS , n_type , ch , varargin{:} ) ;
             at.Fs = FS ;
-            at.nbits = 16 ;
+        end
+        
+        function frequency_sweep( at , time , FS , f_min , f_max  , varargin )
+            at.Y = frequency_sweep( FS , f_min , f_max , time , varargin{:} ) ;
+            at.Fs = FS ;
         end
         
         function write( at , file_name )
