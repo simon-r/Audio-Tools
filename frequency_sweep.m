@@ -52,15 +52,15 @@ end
 
 end
 
-function [ tr ] = triangle_f(x)
+function [ tr ] = triangle_f( x )
     tr = asin( sin( x ) ) / (pi/2) ;
 end
 
-function [ sq ] = square_f(x)
+function [ sq ] = square_f( x )
     sq = sign( sin( x ) ) ;
 end
 
-function [ sw ] = sawtooth_f ( x ) 
+function [ sw ] = sawtooth_f( x ) 
     a = 2*pi ;
     sw = 2*( x/a - floor( x/a + 1/2 ) ) ;
 end

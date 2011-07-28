@@ -10,7 +10,7 @@ function [ Y samples time ] = noise( time , FS , n_type , ch , varargin )
 %   n_type: noise type; must be 'white', 'pink' or 'brownian'
 %   ch: number of channels
 %   
-% Otional parameters:
+% Optional parameters:
 %   'gain_dB' : set the gain in dB (the default value is -6 dB)
 %   'gain_lin' : set the linear gain
 %   'rand_gen' : random generator must be 'uniform' (default) or 'normal'

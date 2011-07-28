@@ -60,6 +60,12 @@ classdef AudioTrack < hgsetget
                 [ at.Y at.Fs at.nbits ] = flacread2( file_name ) ;
             end
         end
+
+        function noise( at , time , FS , n_type , ch , varargin )
+            at.Y = noise( time , FS , n_type , ch , varargin{:} ) ;
+            at.Fs = FS ;
+            at.nbits = 16 ;
+        end
         
         function write( at , file_name )
             wavwrite( at.Y , at.Fs , at.nbits , file_name ) ;
