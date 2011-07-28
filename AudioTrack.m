@@ -1,17 +1,22 @@
-classdef AudioTrack
+classdef AudioTrack < hgsetget
     %UNTITLED2 Summary of this class goes here
     %   Detailed explanation goes here
     
     properties ( SetAccess = public , GetAccess = public )
         Y ;
         Fs = 44100 ;
+        nbits ;
     end
     
-    properties ( Dependent = true, SetAccess = private , GetAccess = public)
+    properties ( Dependent = true, SetAccess = private , GetAccess = public )
         time
         channels
         samples
         period
+    end
+    
+    properties ( SetAccess = private , GetAccess = private )
+        player
     end
     
     methods
@@ -44,6 +49,29 @@ classdef AudioTrack
         
         function T = get.period( obj )
             T = 1 / obj.Fs ;
+        end
+        
+        function open( at , file_name ) 
+            if not ( isempty( regexp( file_name , '\.wav$', 'once' ) ) )
+                [ at.Y at.Fs at.nbits ] = wavread( file_name ) ;
+            elseif not ( isempty( regexp( file_name , '\.mp3$', 'once' ) ) )
+                [ at.Y at.Fs at.nbits ] = mp3read( file_name ) ;
+            elseif not ( isempty( regexp( file_name , '\.flac$', 'once' ) ) )
+                [ at.Y at.Fs at.nbits ] = flacread2( file_name ) ;
+            end
+        end
+        
+        function write( at , file_name )
+            wavwrite( at.Y , at.Fs , at.nbits , file_name ) ;
+        end
+        
+        function play( at )
+            at.player = audioplayer( at.Y , at.Fs ) ; 
+            play ( at.player ) ;
+        end
+        
+        function stop( at )
+            stop( at.player ) ;
         end
     end
     
