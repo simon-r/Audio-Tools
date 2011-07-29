@@ -199,11 +199,10 @@ add_toolbar_icon( ht , 'pause.png' , 'Pause' , @pause_play ) ;
     end
 
     function button_h = add_toolbar_icon( ht , icon_name , tooltip_string , callback ) 
-        X = imread( fullfile( '.','icons',icon_name ) );
+        X = imread( fullfile( '.' , 'icons' , icon_name ) );
         
         icon = imresize( X , [16 16] ) ;
         
-        %icon = ind2rgb(X,map);
         button_h =  uipushtool(ht,'CData',icon,...
             'TooltipString', tooltip_string , ...
             'ClickedCallback', callback ) ;
