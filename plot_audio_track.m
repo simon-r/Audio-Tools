@@ -54,8 +54,10 @@ legend( leggend_titles , 'Location' , 'NorthEast') ;
 ht = uitoolbar;
 
 play_button = add_toolbar_icon( ht , 'greenarrowicon.gif' , 'Play' , @start_play ) ;
-stop_button = add_toolbar_icon( ht , 'greencircleicon.gif' , 'Stop' , @stop_play ) ;
-pause_button = add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_play ) ;
+
+add_toolbar_icon( ht , 'greencircleicon.gif' , 'Stop' , @stop_play ) ;
+
+add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_play ) ;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -158,9 +160,11 @@ pause_button = add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_p
 
     function pause_play(varargin) 
         if play_state
+            set( player , 'StopFcn' , [] ) ;
             pause( player ) ;
             play_state = false ;
         else
+            set( player , 'StopFcn' , @stop_play ) ;
             resume( player ) ;
             play_state = true ;
         end
