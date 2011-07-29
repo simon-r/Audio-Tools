@@ -53,11 +53,11 @@ legend( leggend_titles , 'Location' , 'NorthEast') ;
 % Adding toolbar icons and callback
 ht = uitoolbar;
 
-play_button = add_toolbar_icon( ht , 'greenarrowicon.gif' , 'Play' , @start_play ) ;
+play_button = add_toolbar_icon( ht , 'play.png' , 'Play' , @start_play ) ;
 
-add_toolbar_icon( ht , 'greencircleicon.gif' , 'Stop' , @stop_play ) ;
+add_toolbar_icon( ht , 'stop.png' , 'Stop' , @stop_play ) ;
 
-add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_play ) ;
+add_toolbar_icon( ht , 'pause.png' , 'Pause' , @pause_play ) ;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -199,10 +199,11 @@ add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_play ) ;
     end
 
     function button_h = add_toolbar_icon( ht , icon_name , tooltip_string , callback ) 
-        [X map] = imread(fullfile(...
-            matlabroot,'toolbox','matlab','icons',icon_name));
+        X = imread( fullfile( '.','icons',icon_name ) );
         
-        icon = ind2rgb(X,map);
+        icon = imresize( X , [16 16] ) ;
+        
+        %icon = ind2rgb(X,map);
         button_h =  uipushtool(ht,'CData',icon,...
             'TooltipString', tooltip_string , ...
             'ClickedCallback', callback ) ;
