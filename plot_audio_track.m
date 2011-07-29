@@ -18,6 +18,8 @@ play_time = 0 ;
 play_delta_time = 0.25 ;
 play_state = false ;
 
+max_time = sY(1) * (1/FS) ;
+
 % Add tracks
 ln = 1 ;
 main_plot_audio_track() ;
@@ -40,46 +42,27 @@ end
 % init player cursor
 for i=1:sY(2)
     axes( h(i) ) ;
-    play_line(i) = line( [0 0] , [-st_m st_m] , 'Color' , 'magenta' ) ;
+    play_line(i) = line( [0 0] , [-st_m st_m] , 'Color' , 'magenta' , ... 
+        'ButtonDownFcn' , @player_drag_begin ) ;
 end
 
 axes( h(1) ) ;
 legend( leggend_titles , 'Location' , 'NorthEast') ;
 
+
 % Adding toolbar icons and callback
 ht = uitoolbar;
 
-[X map] = imread(fullfile(...
-    matlabroot,'toolbox','matlab','icons','greenarrowicon.gif'));
-
-% Convert indexed image and colormap to truecolor
-icon = ind2rgb(X,map);
-play_button = uipushtool(ht,'CData',icon,...
-    'TooltipString','Play',...
-    'ClickedCallback', @start_play ) ;
-
-[X map] = imread(fullfile(...
-    matlabroot,'toolbox','matlab','icons','greencircleicon.gif'));
-
-icon = ind2rgb(X,map);
-stop_button =  uipushtool(ht,'CData',icon,...
-    'TooltipString','Stop',...
-    'ClickedCallback', @stop_play ) ;
-
-[X map] = imread(fullfile(...
-    matlabroot,'toolbox','matlab','icons','greencircleicon.gif'));
-
-icon = ind2rgb(X,map);
-pause_button =  uipushtool(ht,'CData',icon,...
-    'TooltipString','Pause',...
-    'ClickedCallback', @pause_play ) ;
+play_button = add_toolbar_icon( ht , 'greenarrowicon.gif' , 'Play' , @start_play ) ;
+stop_button = add_toolbar_icon( ht , 'greencircleicon.gif' , 'Stop' , @stop_play ) ;
+pause_button = add_toolbar_icon( ht , 'greencircleicon.gif' , 'Pause' , @pause_play ) ;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Callbacks & functions 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    function main_plot_audio_track
+    function main_plot_audio_track 
         t = 1/FS ;
         
         
@@ -109,7 +92,7 @@ pause_button =  uipushtool(ht,'CData',icon,...
         end
     end
 
-    function plot_line_sign( sg , s_color )
+    function plot_line_sign( sg , s_color ) 
         % Matrix format:
         % C [ channel sample_begin sample_end time_begin time_end ]
         sC = size( sg ) ;
@@ -141,31 +124,39 @@ pause_button =  uipushtool(ht,'CData',icon,...
         end
     end
 
-    function start_play(varargin)    
+    function start_play(varargin) 
         player = audioplayer( Y , FS ) ; 
-        set( player , 'TimerPeriod' , play_delta_time , 'TimerFcn' , @timer_play ) ;
-        play ( player ) ;
+        set( player , 'TimerPeriod' , play_delta_time , 'TimerFcn' , ...
+            @timer_play , 'StopFcn' , @stop_play ) ;
+        start_sample = floor(play_time*FS ) + 1 ;
+        stop_sample = floor( max_time*FS ) ;
+        play ( player , [start_sample stop_sample] ) ;
         set( play_button , 'Enable' , 'off' ) ;
         play_state = true ;
     end
 
-    function timer_play(varargin)
+    function timer_play(varargin) 
         play_time = play_time + play_delta_time ;
         Xl = [play_time play_time] ;
         for i=1:sY(2)
             set( play_line(i) , 'XData' , Xl );
         end
-        disp(play_time) ;
+        %disp(play_time) ;
     end
 
-    function stop_play(varargin)        
+    function stop_play(varargin) 
         stop( player ) ;
         play_time = 0 ;
         set( play_button , 'Enable' , 'on' ) ;
+        for i=1:sY(2)
+            set( play_line(i) , 'XData' , [play_time play_time] );
+        end
         play_state = false ;
+        
+         disp('stop') ;
     end
 
-    function pause_play(varargin)
+    function pause_play(varargin) 
         if play_state
             pause( player ) ;
             play_state = false ;
@@ -173,6 +164,44 @@ pause_button =  uipushtool(ht,'CData',icon,...
             resume( player ) ;
             play_state = true ;
         end
+        
+        disp('pause') ;
+    end
+
+    function player_drag_begin(varargin) 
+        set( gcf , 'WindowButtonMotionFcn' , @dragging_player_fcn ) ;
+        set( gcf , 'WindowButtonUpFcn' , @stop_player_drag_fcn ) ;
+    end
+
+    function dragging_player_fcn( varargin ) 
+        pt = get( h(1) , 'CurrentPoint' ) ;
+        if  pt(1) < 0 || pt(1) > max_time
+            return ;
+        end
+        
+        for i=1:sY(2)
+            set( play_line(i) , 'XData' , pt(1)*[1 1] );
+            play_time = pt(1) ;
+        end
+    end
+
+    function stop_player_drag_fcn(varargin) 
+        set( gcf , 'WindowButtonMotionFcn' , '' ) ;
+        if play_state
+            stop_play ;
+            dragging_player_fcn ;
+            start_play ;
+        end
+    end
+
+    function button_h = add_toolbar_icon( ht , icon_name , tooltip_string , callback ) 
+        [X map] = imread(fullfile(...
+            matlabroot,'toolbox','matlab','icons',icon_name));
+        
+        icon = ind2rgb(X,map);
+        button_h =  uipushtool(ht,'CData',icon,...
+            'TooltipString', tooltip_string , ...
+            'ClickedCallback', callback ) ;
     end
 end
 
