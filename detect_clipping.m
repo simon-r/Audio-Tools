@@ -3,7 +3,7 @@ function [ C clip_cnt ] = detect_clipping( Y , FS , level_dB )
 %   return a ( clip by 6 ) matrix that stores all clipping intervals
 %
 % Matrix format:
-% C [ chanel sample_begin sample_end time_begin time_end clip_sign ]
+% C [ channel sample_begin sample_end time_begin time_end clip_sign ]
 %
 % Arguments:
 % Y : Audio trak
