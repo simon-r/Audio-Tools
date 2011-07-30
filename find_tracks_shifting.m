@@ -1,5 +1,5 @@
-function [ D , dv ] = align_audio( Y , X , test_center , test_size , max_shift )
-%[ D , best_dist , dv ] = align_audio( Y , X , test_center , test_size , max_shift ) 
+function [ D , dv ] = find_tracks_shifting( Y , X , test_center , test_size , max_shift )
+%[ D , best_dist , dv ] = find_tracks_shifting( Y , X , test_center , test_size , max_shift ) 
 %  search the best fit point between two audio track.
 %  It try to move the vector X such that the distance between X and Y is
 %  minimized.
@@ -22,16 +22,12 @@ s = test_size ;
 m = max_shift ;
 
 if s <= 10000
-    p = 1 ;
+    tsz = s ;
 else
-    p = -9.090e-7 * s + 1.0091 ;
+    tsz = 10001 ;
 end
 
-if p < 0.01
-    p = 0.01 ;
-end
-
-indx = floor ( 2*s*rand( 1 , floor( s/(1/p*log(s)+1) ) ) ) - s ;
+indx = floor ( 2*s*rand( 1 , tsz ) ) - s ;
 r = c + indx ; 
 
 D = -m ;
