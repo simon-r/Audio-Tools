@@ -11,7 +11,7 @@ function [ h ] = plot_audio_track( Y , FS , varargin )
 %                   detect_silence
 %   example:
 %    plot_audio_track( a.Y , a.Fs , 'add_silence' , S , 'add_clipping' , C )
-%       where C is a metrix retirned by the by detect_clipping and S
+%       where C is a matrix retirned by the by detect_clipping and S
 %       is a matrix returned by detect_silence 
 %     see also: detect_silence, detect_clipping
 
