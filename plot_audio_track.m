@@ -155,7 +155,7 @@ add_toolbar_icon( ht , 'pause.png' , 'Pause' , @pause_play ) ;
         end
         play_state = false ;
         
-         disp('stop') ;
+        % disp('stop') ;
     end
 
     function pause_play(varargin) 
@@ -169,7 +169,7 @@ add_toolbar_icon( ht , 'pause.png' , 'Pause' , @pause_play ) ;
             play_state = true ;
         end
         
-        disp('pause') ;
+        %disp('pause') ;
     end
 
     function player_drag_begin(varargin) 

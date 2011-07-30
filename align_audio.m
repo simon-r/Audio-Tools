@@ -1,27 +1,37 @@
-function [ D , r , x , ry , dv] = align_audio( X , Y , c , s , m )
+function [ D , best_dist , dv ] = align_audio( Y , X , c , s , m )
 
-x = X(c-s:c+s) ;
+
+if s <= 10000
+    p = 1 ;
+else
+    p = -9.090e-7 * s + 1.0091 ;
+end
+
+if p < 0.01
+    p = 0.01 ;
+end
+
+indx = floor ( 2*s*rand( 1 , floor( s/(1/p*log(s)+1) ) ) ) - s ;
+r = c + indx ; 
 
 D = -m ;
-r =  realmax('double') ;
+best_dist = realmax('double') ;
 
 dv = zeros(2*m+1,2) ;
 
-for i=-m:m
-   y = Y(c+i-s:c+i+s)  ;
-   d = distance( x , y ) ;
+for i=-m:m   
+   d = distance( Y(r,:) , X(r+i,:) ) ;
    
-   if d < r 
+   if d < best_dist 
        D = i ;
-       r = d ;
-       ry = y ;
+       best_dist = d ;
    end
    
    dv(i+m+1,:) = [i d] ;
 end
 
     function d = distance( x , y )
-        d = sqrt( sum( ( x - y ).^2 ) ) ;
+        d = mean ( sqrt( sum( ( x - y ).^2 ) ) ) ;
     end
 
 end
