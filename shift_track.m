@@ -1,20 +1,20 @@
 function [ Y ] = shift_track( Y , D , varargin )
 %[ Y ] = shift_track( Y , D )
-%   schift Y of D samples.
-%    D can be positive or nogative.
-%   it return a new vector Y 
+%   shift Y of D samples.
+%    D can be positive or negative.
+%    it return a new vector Y
 %
 %  shift_track( Y , D , shape )
 %
 %    optional shape:
 %             same: return a new Y with the same size of the original Y it
 %                   remove the unused data
-%             full: don't remove any data but simply prepend or append D
+%             full: don't remove any data but simply prepends or append D
 %                   zeros to Y
-%
+%  see also: find_tracks_shifting
 
 p = inputParser ;
-p.addOptional( 'shape' , 'same' , @(x)strcmpi(x,'same') || ... 
+p.addOptional( 'shape' , 'same' , @(x)strcmpi(x,'same') || ...
     strcmpi(x,'full') ) ;
 
 p.parse( varargin{:} ) ;

@@ -15,6 +15,7 @@ function [ D , dv ] = find_tracks_shifting( Y , X , test_center , test_size , ma
 %  dv: a [2*max_shift+1 by 2] vector that store the tested shift and the
 %       computed distance (this vector do NOT represents a real euclidean
 %       distance) 
+%  see also: shift_track
 
 
 c = test_center ;
