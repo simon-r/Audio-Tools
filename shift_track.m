@@ -7,10 +7,11 @@ function [ Y ] = shift_track( Y , D , varargin )
 %  shift_track( Y , D , shape )
 %
 %    optional shape:
-%             same: return a new Y with the same size of the original Y it
+%             same: return a new Y with the same size as the original Y it
 %                   remove the unused data
-%             full: don't remove any data but simply prepends or append D
-%                   zeros to Y
+%             full: remove or add as less as possible data; the size of the resulting
+%                   vector is not equal to Y
+%
 %  see also: find_tracks_shifting
 
 p = inputParser ;
@@ -30,9 +31,12 @@ sY = size( Y ) ;
 ns = zeros( abs(D) , sY(2) ) ;
 
 if D > 0
-    Y = [ Y( (f*D+1):sY(1) , : ) ; ns ] ;
+    if f == 0
+        ns = [] ;
+    end
+    Y = [ Y( (D+1):sY(1) , : ) ; ns ] ;
 elseif D < 0
-    Y = [ ns ; Y( 1:(sY(1)+f*D) , : ) ] ;
+    Y = [ ns ; Y( 1:(sY(1)+D*f) , : ) ] ;
 end
 
 end
