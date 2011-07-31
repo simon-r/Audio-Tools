@@ -18,8 +18,12 @@ com_fft = fit_spectral( com_fft , ref_fft , freq , ...
 h = gca ;
 
 for i=1:sM(2) 
+    
+    dB = decibel_u( com_fft(r,i) , ref_fft(r,i) ) ;
+    dB = remove_complex( dB ) ;
+    
     subplot(sM(2),1,i) ;
-    plot( freq(r)' , decibel_u( com_fft(r,i) , ref_fft(r,i) ) , 'Color' , 'blue' ) ;
+    plot( freq(r) , dB , 'Color' , 'blue' ) ;
     set( gca , 'YScale' , 'lin' , 'XScale' , 'lin' ) ;
     xlabel('Freq [Hz]') ;
     ylabel('dB') ;
