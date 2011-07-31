@@ -13,7 +13,7 @@ r = find( freq > fl(1) & freq < fl(2) ) ;
 sM = size( com_fft ) ;
 
 com_fft = fit_spectral( com_fft , ref_fft , freq , ... 
-    'freq_limit' , fl ) ;
+    'freq_limit' , fl , 'model' , 'mult' ) ;
 
 h = gca ;
 
