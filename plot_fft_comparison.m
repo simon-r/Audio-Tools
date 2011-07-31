@@ -21,7 +21,7 @@ for i=1:sM(1)
     c_f = mean( com_fft(i,r) ) ;
     
     subplot(sM(1),1,i) ;
-    plot( freq(r) , 20*log10( (m_f/c_f)*com_fft(i,r)./ref_fft(r) ) , 'Color' , 'blue' ) ;
+    plot( freq(r) , decibel_u( com_fft(i,r) , ref_fft(r) ) , 'Color' , 'blue' ) ;
     set( gca , 'YScale' , 'lin' , 'XScale' , 'lin' ) ;
     xlabel('Freq [Hz]') ;
     ylabel('dB') ;
