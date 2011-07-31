@@ -15,16 +15,16 @@ function [ spr g ] = fit_spectral( ref_spr , spr , freq , varargin)
 
 
 p = inputParser ;
-p.addOptional( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
+p.addParamValue( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
 p.parse( varargin{:} );
 
 fl = p.Results.freq_limit ;
 
-r = find( freq > fl(1) && freq < fl(2) ) ;
-g = - ( spr(r) - ref_spr(r) ) / size(  spr(r) , 1 ) ;
+r = find( freq > fl(1) & freq < fl(2) ) ;
+g = -sum( spr(r,:) - ref_spr(r,:) ) / size( spr(r) , 2 ) ;
 
 for i=1:size(spr,2)
-    spr(:,i) = spr(:,i) + g(:,i) ;
+    spr(:,i) = spr(:,i) + g(1,i) ;
 end
 
 end

@@ -1,27 +1,25 @@
-function [ h ] = plot_fft_comparison( ref_fft , com_fft , freq , varargin )
+function [ h ] = plot_fft_comparison( com_fft , ref_fft , freq , varargin )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
 p = inputParser ;
-p.addOptional( 'freq_limit' , max_freq() , @(x)isnumeric(x) ) ;
+p.addParamValue( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
 p.parse( varargin{:} );
 
-freq_limit = p.Results.freq_limit ;
+fl = p.Results.freq_limit ;
 
-r = find ( freq < freq_limit ) ;
+r = find( freq > fl(1) & freq < fl(2) ) ;
 
-sM = size( ref_fft ) ;
+sM = size( com_fft ) ;
 
-m_f = mean( ref_fft ) ;
+com_fft = fit_spectral( com_fft , ref_fft , freq , ... 
+    'freq_limit' , fl ) ;
 
 h = gca ;
 
-for i=1:sM(1)
-    
-    c_f = mean( com_fft(i,r) ) ;
-    
-    subplot(sM(1),1,i) ;
-    plot( freq(r) , decibel_u( com_fft(i,r) , ref_fft(r) ) , 'Color' , 'blue' ) ;
+for i=1:sM(2) 
+    subplot(sM(2),1,i) ;
+    plot( freq(r)' , decibel_u( com_fft(r,i) , ref_fft(r,i) ) , 'Color' , 'blue' ) ;
     set( gca , 'YScale' , 'lin' , 'XScale' , 'lin' ) ;
     xlabel('Freq [Hz]') ;
     ylabel('dB') ;
