@@ -19,6 +19,10 @@ classdef AudioTrack < hgsetget
         player
     end
     
+    properties ( SetAccess = private , GetAccess = public )
+        opts
+    end
+    
     methods
         function obj = set.Y( obj , y )
             s = size(y) ;
@@ -51,18 +55,22 @@ classdef AudioTrack < hgsetget
             T = 1 / obj.Fs ;
         end
         
-        function open( at , file_name ) 
+        function open( at , file_name )
             if not ( isempty( regexp( file_name , '\.wav$', 'once' ) ) )
-                [ at.Y at.Fs at.nbits ] = wavread( file_name ) ;
+                [ at.Y at.Fs at.nbits at.opts] = wavread( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.mp3$', 'once' ) ) )
-                [ at.Y at.Fs at.nbits ] = mp3read( file_name ) ;
+                [ at.Y at.Fs at.nbits at.opts] = mp3read( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.flac$', 'once' ) ) )
-                [ at.Y at.Fs at.nbits ] = flacread2( file_name ) ;
+                [ at.Y at.Fs at.nbits at.opts] = flacread2( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.ogg$', 'once' ) ) )
-                [ at.Y at.Fs at.nbits ] = oggread( file_name ) ;
+                [ at.Y at.Fs at.nbits at.opts] = oggread( file_name ) ;
             end
         end
-
+        
+        function write( at , file_name )
+            wavwrite( at.Y , at.Fs , at.nbits , file_name ) ;
+        end
+        
         function noise( at , time , FS , n_type , ch , varargin )
             at.Y = noise( time , FS , n_type , ch , varargin{:} ) ;
             at.Fs = FS ;
@@ -73,8 +81,10 @@ classdef AudioTrack < hgsetget
             at.Fs = FS ;
         end
         
-        function write( at , file_name )
-            wavwrite( at.Y , at.Fs , at.nbits , file_name ) ;
+        function plot_fft_comparison( at , at_ref , time_range )
+            [sp f] = audio_fft( at.Y , at.Fs , time_range ) ;
+            [sp_ref] = audio_fft( at_ref.Y , at_ref.Fs , time_range ) ;
+            plot_fft_comparison( sp , sp_ref , f , 'freq_limit' , [50 16000] );
         end
         
         function plot_audio_fft( at , time_range , varargin )
