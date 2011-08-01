@@ -15,8 +15,8 @@ h = zeros(sdB(2)) ;
 
 for i=1:sdB(2)         
     subplot( sdB(2) , 1 , i ) ;
-    h(i) = plot( x , dB , varargin{:} ) ;
-    set( h(i) , 'YScale' , 'lin' , 'XScale' , 'lin' ) ;
+    h(i) = plot( x , dB(:,i) , varargin{:} ) ;
+    set( gca , 'YScale' , 'lin' , 'XScale' , 'lin' ) ;
     xlabel(xl_message) ;
     ylabel('dB') ;
     legend(l_message);

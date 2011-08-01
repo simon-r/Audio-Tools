@@ -26,7 +26,7 @@ else
     f = 1 ;
 end
 
-dB = zeros( size(r) , sM(2) ) ;
+dB = zeros( size(r,2) , sM(2) ) ;
 
 for i=1:sM(2)
     dB(:,i) = decibel_u( com_fft(r,i) , ref_fft(r,i-(i-1)*f) ) ;
