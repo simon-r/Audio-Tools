@@ -81,10 +81,8 @@ classdef AudioTrack < hgsetget
             at.Fs = FS ;
         end
         
-        function plot_fft_comparison( at , at_ref , time_range )
-            [sp f] = audio_fft( at.Y , at.Fs , time_range ) ;
-            [sp_ref] = audio_fft( at_ref.Y , at_ref.Fs , time_range ) ;
-            plot_fft_comparison( sp , sp_ref , f , 'freq_limit' , [50 16000] );
+        function [ dB freq h ] = spectral_comparison( at_ref , time_range , varargin )
+            [ dB freq h ] = spectral_comparison( at.Y , at_ref.Y , at.Fs , time_range , varargin ) ;
         end
         
         function plot_audio_fft( at , time_range , varargin )
