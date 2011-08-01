@@ -1,4 +1,4 @@
-function [ h ] = plot_db( x , dB , x_mode , l_message , t_message , varargin )
+function [ h ] = plot_db( x , dB , x_mode , l_message , t_message )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
