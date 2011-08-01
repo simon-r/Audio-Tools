@@ -4,7 +4,7 @@ function [ dB freq h ] = spectral_comparison( Y , Yref , FS , time_range , varar
 
 p = inputParser ;
 p.addParamValue( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
-p.addParamValue('plot', 'yes' , @(x)strcmpi(x,'yes') || strcmpi(x,'no') ) ;
+p.addParamValue('plot', 'no' , @(x)strcmpi(x,'yes') || strcmpi(x,'no') ) ;
 p.parse( varargin{:} );
 
 fl = p.Results.freq_limit ;
@@ -36,6 +36,10 @@ end
 freq = freq(r) ;
 
 h = [] ;
+
+if strcmpi( p.Results.plot , 'yes' )
+   h = plot_db( freq , dB , 'freq' , 'Spectral deviation in dB' , 'Spectral comparison' ) ;
+end
 
 end
 
