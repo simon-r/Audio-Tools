@@ -10,11 +10,13 @@ p.addParamValue('XScale', 'linear' , @(x)strcmpi(x,'linear') || ...
     strcmpi(x,'log') ) ;
 p.addParamValue('YScale', 'log' , @(x)strcmpi(x,'linear') || ... 
     strcmpi(x,'log') ) ;
+p.addParamValue('phase', 'no' , @(x)strcmpi(x,'yes') || ... 
+    strcmpi(x,'no') ) ;
 
 p.parse(varargin{:});
 
 
-[ s_f freq mm ] = audio_fft( Y , FS , time_range ) ;
+[ s_f phase freq mm ] = audio_fft( Y , FS , time_range ) ;
 
 % r = 1:floor(size(s_f,1)/2) ;
 
@@ -25,17 +27,42 @@ r = find( freq <= mx_freq & freq >= mn_freq ) ;
 
 ch = size(s_f,2) ;
 
-for j = 1:ch
-    subplot( ch , 1 , j ) ;
-    plot( freq(r) , s_f(r,j)/mm ) ;
-    set( gca ,  'XScale' , p.Results.XScale , 'YScale' , p.Results.YScale ) ;
-    ti = sprintf( 'Channel: %1.0f' , j ) ;
-    title( ti ) ; 
-    xlabel('Freq: [Hz]') ;
-    ylabel('Amplitude') ;
+if strcmpi( p.Results.phase , 'no' )
     
-    grid on ;    
-end 
+    for j = 1:ch
+        subplot( ch , 1 , j ) ;
+        plot( freq(r) , s_f(r,j)/mm ) ;
+        set( gca ,  'XScale' , p.Results.XScale , 'YScale' , p.Results.YScale ) ;
+        ti = sprintf( 'Channel: %1.0f' , j ) ;
+        title( ti ) ;
+        xlabel('Freq: [Hz]') ;
+        ylabel('Amplitude') ;
+        
+        grid on ;
+    end
+    
+else
+    
+    for j = 1:ch
+        subplot( ch , 1 , j ) ;
+        [ax,h1,h2] = plotyy( freq(r) , s_f(r,j)/mm  , freq(r) , phase(r) ) ;
+        set( ax(1) , 'XScale' , p.Results.XScale ) ;
+        set( ax(2) , 'YScale' , p.Results.YScale ) ;
+        
+        set( ax(2) , 'YScale' , 'linear' ) ;
+        
+        set(get(ax(1),'Ylabel'),'String','Amplitude') 
+        set(get(ax(2),'Ylabel'),'String','phase') 
+        
+        ti = sprintf( 'Channel: %1.0f' , j ) ;
+        title( ti ) ;
+        xlabel('Freq: [Hz]') ;
+        ylabel('Amplitude') ;
+        
+        grid on ;
+    end
+    
+end
 
 end
 
