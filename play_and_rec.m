@@ -5,8 +5,8 @@ function [ recTr ] = play_and_rec( Tr , varargin )
 
 ID = -1 ;
 
-recorder = audiorecorder( Tr.Fs , Tr.nbits , Tr.nchannels , ID ) ;
-player = audioplayer( Tr.Y , Fs , Tr.nbits  ) ;
+recorder = audiorecorder( Tr.Fs , Tr.nbits , Tr.channels , ID ) ;
+player = audioplayer( Tr.Y , Tr.Fs , Tr.nbits  ) ;
 
 play ( player ) ;
 

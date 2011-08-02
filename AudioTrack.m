@@ -24,11 +24,11 @@ classdef AudioTrack < hgsetget
     end
     
     methods
-        
-        function obj = AudioTrack( Y , Fs , nbits )
-            obj.Y = Y ;
-            obj.Fs = Fs ;
-            obj.nbits = nbits ;
+                
+        function obj = AudioTrack( varargin )
+%             obj.Y = Y ;
+%             obj.Fs = Fs ;
+%             obj.nbits = nbits ;
         end
               
         function obj = set.Y( obj , y )
