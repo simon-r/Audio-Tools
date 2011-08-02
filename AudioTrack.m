@@ -100,6 +100,10 @@ classdef AudioTrack < hgsetget
             [ dB freq h ] = spectral_comparison( at.Y , at_ref.Y , at.Fs , time_range , varargin ) ;
         end
         
+        function [ res , dB ] = u_rms( at , varargin )
+            [ res , dB ] = u_rms( at.Y , at.Fs , varargin{:} ) ;
+        end
+        
         function plot_audio_fft( at , time_range , varargin )
             plot_audio_fft( at.Y , at.Fs , time_range , varargin{:} ) ;
         end
