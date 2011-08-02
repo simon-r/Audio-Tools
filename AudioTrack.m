@@ -120,6 +120,7 @@ classdef AudioTrack < hgsetget
         function stop( at )
             stop( at.player ) ;
         end
+        
     end
     
 end
