@@ -24,13 +24,21 @@ classdef AudioTrack < hgsetget
     end
     
     methods
-                
+        
         function obj = AudioTrack( varargin )
-%             obj.Y = Y ;
-%             obj.Fs = Fs ;
-%             obj.nbits = nbits ;
+            if size( varargin , 2 ) >= 1
+                obj.Y = varargin{1} ;
+            end
+            
+            if size( varargin , 2 ) >= 2
+                obj.Fs = varargin{2} ;
+            end
+            
+            if size( varargin , 2 ) == 3
+                obj.nbits = varargin{3} ;
+            end
         end
-              
+        
         function obj = set.Y( obj , y )
             s = size(y) ;
             if s(2) > 15 
