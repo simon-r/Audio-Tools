@@ -9,8 +9,10 @@ p.parse( varargin{:} );
 
 fl = p.Results.freq_limit ;
 
-[com_fft freq] = audio_fft( Y , FS , time_range ) ;
-[ref_fft] = audio_fft( Yref , FS , time_range ) ;
+[com_fft phase freq] = audio_fft( Y , FS , time_range ) ;
+[ref_fft phase ] = audio_fft( Yref , FS , time_range ) ;
+
+phase = [] ;
 
 r = find( freq > fl(1) & freq < fl(2) ) ;
 
