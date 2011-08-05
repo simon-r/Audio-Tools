@@ -4,13 +4,13 @@ function [ dB freq h ] = spectral_comparison( Y , Yref , FS , time_range , varar
 
 p = inputParser ;
 p.addParamValue( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
-p.addParamValue('plot', 'no' , @(x)strcmpi(x,'yes') || strcmpi(x,'no') ) ;
+p.addParamValue( 'plot' , 'no' , @(x)strcmpi(x,'yes') || strcmpi(x,'no') ) ;
 p.parse( varargin{:} );
 
 fl = p.Results.freq_limit ;
 
 [com_fft phase freq] = audio_fft( Y , FS , time_range ) ;
-[ref_fft phase ] = audio_fft( Yref , FS , time_range ) ;
+[ref_fft] = audio_fft( Yref , FS , time_range ) ;
 
 phase = [] ;
 
@@ -40,7 +40,7 @@ freq = freq(r) ;
 h = [] ;
 
 if strcmpi( p.Results.plot , 'yes' )
-   h = plot_db( freq , dB , 'freq' , 'Spectral deviation in dB' , 'Spectral comparison' ) ;
+   h = plot_db( freq , dB , 'freq' , 'FR Magnitude in dB' , 'Spectral comparison' ) ;
 end
 
 end

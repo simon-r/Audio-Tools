@@ -5,7 +5,7 @@ function [ abs_dft phase freq peak ] = audio_fft( Y , FS , time_range , varargin
 if size( varargin , 2 ) >= 1
     smooth = varargin{1} ;
 else
-    smooth = 30 ;
+    smooth = 500 ;
 end
 
 t = 1/FS ;
