@@ -7,7 +7,7 @@ if time_range(2) < time_range(1)
     error('error') ;
 end
 
-smooth = 30 ;
+smooth = 300 ;
 
 t = 1/FS ;
 

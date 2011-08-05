@@ -51,7 +51,7 @@ classdef TestSpeakerResponse < hgsetget
             obj.rec_test ;
         end
         
-        out = analyze_response( obj , varargin )
+        [ dB freq h ] = analyze_response( obj , varargin )
                     
     end
     
@@ -95,6 +95,8 @@ classdef TestSpeakerResponse < hgsetget
             obj.rec_cnt = obj.rec_cnt + 1 ;
             
             disp( 'End recording' ) ;
+            
+            obj.ResT.Y = getaudiodata( obj.recorder ) ;
         end
     end
     
