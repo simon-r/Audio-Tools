@@ -40,6 +40,7 @@ classdef TestSpeakerResponse < hgsetget
         
         function run_test( obj )
             obj.play_cnt = 1 ;
+            obj.rec_cnt = 1 ;
             obj.play_times = zeros( floor( obj.RefT.time / obj.TimerPeriod ) + 2 , 2 ) ;
             obj.rec_times  = obj.play_times ;
             
