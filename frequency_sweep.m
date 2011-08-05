@@ -30,8 +30,8 @@ gain = p.Results.gain ;
 samples = floor( time / t ) ;
 Y = zeros( samples , ch ) ;
 
-omega_min = 2*pi*f_min ;
-omega_max = 2*pi*f_max ;
+omega_min = pi*f_min ;
+omega_max = pi*f_max ;
 
 delta_omega = ( omega_max - omega_min ) / ( samples - 1 ) ;
 delta_t = time / ( samples - 1 ) ;
