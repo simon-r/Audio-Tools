@@ -39,6 +39,8 @@ classdef TestSpeakerResponse < hgsetget
         end
         
         function run_test( obj )
+            
+            disp( 'Start test' ) ;
             obj.play_cnt = 1 ;
             obj.rec_cnt = 1 ;
             obj.play_times = zeros( floor( obj.RefT.time / obj.TimerPeriod ) + 2 , 2 ) ;
@@ -49,7 +51,8 @@ classdef TestSpeakerResponse < hgsetget
             obj.rec_test ;
         end
         
- 
+        out = analyze_response( obj , varargin )
+                    
     end
     
     methods ( Access = private )
@@ -57,7 +60,7 @@ classdef TestSpeakerResponse < hgsetget
         function play_ref( obj )
             obj.player = audioplayer( obj.RefT.Y , obj.RefT.Fs ) ;
             set ( obj.player , 'StartFcn' , @obj.play_callback ) ;
-            set ( obj.player , 'TimerPeriod' , 0.5 ) ;
+            set ( obj.player , 'TimerPeriod' , obj.TimerPeriod ) ;
             set (  obj.player , 'TimerFcn' , @obj.play_callback ) ;
             set (  obj.player , 'StopFcn' , @obj.play_callback ) ;
             
@@ -73,7 +76,7 @@ classdef TestSpeakerResponse < hgsetget
         function rec_test( obj ) 
             obj.recorder = audiorecorder( obj.RefT.Fs , obj.RefT.nbits , obj.RefT.channels ) ;
             set ( obj.recorder , 'StartFcn' , @obj.rec_callback ) ;
-            set ( obj.recorder , 'TimerPeriod' , 0.5 ) ;
+            set ( obj.recorder , 'TimerPeriod' , obj.TimerPeriod ) ;
             set ( obj.recorder , 'TimerFcn' , @obj.rec_callback ) ;
             set ( obj.recorder , 'StopFcn' , @obj.stop_rec_callback ) ;
             
