@@ -93,6 +93,8 @@ elseif strcmpi(n_type,'pink')
     
     Y  = equalizer( Y , FS , F , dB ) ;
     
+     pink_n ;
+    
 elseif strcmpi(n_type,'brownian')
     
     for i = 2:size(Y,1)
@@ -127,7 +129,7 @@ time = samples*t ;
         av = [ 4.6306e-003  5.9961e-003  8.3586e-003 ];
         pv = [ 3.1878e-001  7.7686e-001  9.7785e-001  ];
         
-        for ix = 1:lenght(Y)
+        for ix = 1:length(Y)
             
             % Initialize the randomized sources state
             randreg = zeros(ch,Ngen);
