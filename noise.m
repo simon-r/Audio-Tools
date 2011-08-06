@@ -119,6 +119,41 @@ end
 Y = gain_set( Y , FS , gain , 'lin' ) ;
 time = samples*t ;
 
+
+    function pink_n
+        
+        % ---- These lines are for initialization, executed once ----
+        Ngen = 3;
+        av = [ 4.6306e-003  5.9961e-003  8.3586e-003 ];
+        pv = [ 3.1878e-001  7.7686e-001  9.7785e-001  ];
+        
+        for ix = 1:lenght(Y)
+            
+            % Initialize the randomized sources state
+            randreg = zeros(ch,Ngen);
+            for igen=1:Ngen
+                randreg(:,igen)=av(igen)*2*(rand(ch,1)-0.5);
+            end
+            % ---- End of initialization sequence -----------------------
+            
+            % ---- These lines are executed with each evaluation --------
+            % Note: 'rand' is U[0,1] and changes with each evaluation.
+            rv = rand(ch,1);
+            
+            % Update each generator state per probability schedule
+            for igen=1:Ngen
+                r = find ( rv > pv(igen) ) ;
+                rnd = rand(ch,1) ;
+                
+                randreg(r,igen) = av(igen)*2*( rnd(r) - 0.5 ) ;   
+            end
+            
+            % Signal is the sum of the generators
+            Y(ix)=sum(randreg);
+            % ---- End of one generator evaluation pass -----------------
+        end
+    end
+
 end
 
 
