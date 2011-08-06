@@ -2,10 +2,17 @@ function [ abs_dft phase freq peak ] = audio_fft( Y , FS , time_range , varargin
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
-if size( varargin , 2 ) >= 1
-    smooth = varargin{1} ;
+if size( varargin , 2 ) >= 2
+    if strcmpi( varargin{1} , 'lin' )
+        smooth_type = 0 ;
+        smooth_size = varargin{2} ;
+    elseif strcmpi( varargin{1} , 'log' )
+        smooth_type = 1 ;
+        smooth_size = varargin{2} ;
+    end
 else
-    smooth = 500 ;
+    smooth_type = -1 ;
+    smooth_size = 30 ;
 end
 
 t = 1/FS ;
@@ -28,7 +35,13 @@ ch = size(abs_dft,2) ;
 m = zeros( ch , 1 ) ;
 
 for j = 1:ch
-    abs_dft(:,j) = fastsmooth( abs_dft(:,j) , smooth , 1 , 1 ) ;
+    
+    if smooth_type == 0
+        abs_dft(:,j) = fastsmooth( abs_dft(:,j) , smooth_size , 1 , 1 ) ;
+    elseif smooth_type == 1
+        abs_dft(:,j) = log_smooth( freq , abs_dft(:,j) , smooth_size ) ;
+    end
+    
     m(j) = max( abs(abs_dft(:,j) ) ) ;
 end
 
