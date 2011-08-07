@@ -1,6 +1,6 @@
 function [ Y t_vect ] = frequency_sweep( FS , f_min , f_max , time , varargin )
-% frequency_sweep Summary of this function goes here
-%   Detailed explanation goes here
+% frequency_sweep generate a sweep (of chirp)
+%   
 
 p = inputParser ;
 p.addParamValue( 'waveform', 'sin' , @(x)strcmpi(x,'sin') || ... 
