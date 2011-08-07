@@ -2,7 +2,7 @@ function [ Y ] = fade_inout( Y , FS , fade_time )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
-num_fade_samples = fade_time * FS ;
+num_fade_samples = floor( fade_time * FS ) + 1 ;
 num_samples = length( Y ) ;
 
 ch = min( size( Y ) ) ;

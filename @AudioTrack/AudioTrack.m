@@ -5,7 +5,7 @@ classdef AudioTrack < hgsetget
     properties ( SetAccess = public , GetAccess = public )
         Y ;
         Fs = 44100 ;
-        nbits = 16 ;
+        nbits = 16 ;      
     end
     
     properties ( Dependent = true, SetAccess = private , GetAccess = public )
