@@ -1,5 +1,5 @@
 function [ Y t_vect ] = frequency_sweep( FS , f_min , f_max , time , varargin )
-% frequency_sweep generate a sweep (of chirp)
+% frequency_sweep generate a sweep (or chirp)
 %   
 
 p = inputParser ;
