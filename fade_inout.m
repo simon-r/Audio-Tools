@@ -11,7 +11,7 @@ end
 
 s=0:(num_fade_samples-1) ;
 
-weight = 0.5 * (1 - cos( pi * s / ( num_fade_samples - 1)));
+weight = 0.5 * (1 - cos( pi * s / ( num_fade_samples - 1 ) ) ) ;
 
 Y(1:num_fade_samples) = Y(1:num_fade_samples) .* weight' ;
 
