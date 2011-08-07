@@ -8,6 +8,8 @@ p.addParamValue( 'waveform', 'sin' , @(x)strcmpi(x,'sin') || ...
     strcmpi(x,'square') || ... 
     strcmpi(x,'sawtooth') ) ;
 
+p.addParamValue( 'waveform_fun', @sin ) ;
+
 p.addParamValue('gain', -10 , @(x)isnumeric(x) && x <= 0 ) ;
 
 p.parse(varargin{:});
@@ -20,6 +22,10 @@ elseif strcmpi( p.Results.waveform , 'square' )
     wave_f = @square_f ;
 elseif strcmpi( p.Results.waveform , 'sawtooth' ) 
     wave_f = @sawtooth_f ;
+end
+
+if not ( strcmpi( func2str( p.Results.waveform_fun ) , func2str( @sin ) ) )
+    wave_f = p.Results.waveform_fun ;
 end
 
 ch = 1 ;

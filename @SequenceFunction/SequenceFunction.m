@@ -8,9 +8,9 @@ classdef SequenceFunction < FunctionGenerator
     
     methods
         function y = f( obj , x ) 
-            sx = size(x) ;
+            sizex = size(x) ;
             tr = false ;
-            if sx(2) < sx(1) 
+            if sizex(2) < sizex(1) 
                 x = x' ;
                 tr = true ;
             end
