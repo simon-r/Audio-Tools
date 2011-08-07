@@ -30,22 +30,25 @@ gain = p.Results.gain ;
 samples = floor( time / t ) ;
 Y = zeros( samples , ch ) ;
 
-omega_min = pi*f_min ;
-omega_max = pi*f_max ;
+omega_min = 2*pi*f_min ;
+omega_max = 2*pi*f_max ;
 
 delta_omega = ( omega_max - omega_min ) / ( samples - 1 ) ;
 delta_t = time / ( samples - 1 ) ;
 
-if delta_omega == 0
-    t_v = ones(1,samples) * omega_min ;
-else
-    t_v = omega_min:delta_omega:omega_max ;  
-end
+delta_f = ( f_max - f_min ) / time ;
 
 t_vect = 0:delta_t:time ;
 
+if delta_omega == 0
+    t_v = ( ones(1,samples) * omega_min ) .* t_vect ;
+else
+    t_v = ( 2*pi*(f_min + (delta_f/2)*t_vect) )  .* t_vect ;
+end
+
+
 for i = 1:ch
-    Y(:,i) = wave_f( t_v .* t_vect )' ;
+    Y(:,i) = wave_f( t_v )' ;
 end
 
     Y = gain_set( Y , FS , gain , 'dB' ) ;
