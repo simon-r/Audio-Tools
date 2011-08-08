@@ -25,7 +25,7 @@ classdef AudioTrackMidi < AudioTrack
             
             if length( obj.sounds ) == 1 
                 obj.sounds(obj.midi_channels) = Sound ;
-            elseif  length( obj.sounds ) < obj.midi_cahnnels
+            elseif  length( obj.sounds ) < obj.midi_channels
                 obj.sounds(obj.midi_channels) = Sound ;
             end
             
