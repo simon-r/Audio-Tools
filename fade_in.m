@@ -1,6 +1,6 @@
 function [ Y ] = fade_in( Y , FS , fade_time )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%fade_in set a fade in in the sound file Y.
+
 num_fade_samples = floor( fade_time * FS ) + 1 ;
 num_samples = length( Y ) ;
 

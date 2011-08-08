@@ -36,6 +36,11 @@ gain = p.Results.gain ;
 samples = floor( time / t ) ;
 Y = zeros( samples , ch ) ;
 
+if isempty( Y )
+    t_vect = [] ;
+    return ;
+end
+
 omega_min = 2*pi*f_min ;
 omega_max = 2*pi*f_max ;
 
@@ -47,9 +52,9 @@ delta_f = ( f_max - f_min ) / time ;
 t_vect = 0:delta_t:time ;
 
 if delta_omega == 0
-    t_v = ( ones(1,samples) * omega_min ) .* t_vect ;
+    t_v = set_array( ( ones(1,samples) * omega_min ) .* t_vect ) ;
 else
-    t_v = ( 2*pi*(f_min + (delta_f/2)*t_vect) )  .* t_vect ;
+    t_v = set_array( ( 2*pi*(f_min + (delta_f/2)*t_vect) )  .* t_vect ) ;
 end
 
 

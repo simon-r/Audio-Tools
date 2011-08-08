@@ -26,6 +26,7 @@ classdef Sound < hgsetget
         end
         
         function Y = get_sound( obj )
+            
             freq = midi2freq( obj.note , obj.a ) ;
             
             dB = decibel_u( obj.gain * (obj.velocity / 63.5 ) , 1 ) ;
