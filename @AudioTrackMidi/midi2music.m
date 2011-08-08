@@ -20,10 +20,14 @@ tic ;
 for i=1:notes_cnt
     
     %if mod( i , 200 ) == 0 ; disp(i) ; end ;
-     
-    snd.note = obj.notes_mat(i,4) ;
-    snd.time = obj.notes_mat(i,7) ;
-    snd.velocity = obj.notes_mat(i,5) ;
+    
+    midi_ch = obj.notes_mat(i,3) ;
+    
+    snd(midi_ch).note = obj.notes_mat(i,4) ;
+    snd(midi_ch).time = obj.notes_mat(i,7) ;
+    snd(midi_ch).velocity = obj.notes_mat(i,5) ;
+    
+    
     
 %     if snd.time < 0 
 %         disp ( snd.time )
@@ -31,7 +35,7 @@ for i=1:notes_cnt
 %     if i == 1125 
 %         disp(i) ;
 %     end
-    y = snd.get_sound ;
+    y = snd(midi_ch).get_sound ;
     
     sb = floor ( obj.notes_mat(i,6) * obj.Fs ) + 1 ;
     se = sb + length( y ) - 1 ;
