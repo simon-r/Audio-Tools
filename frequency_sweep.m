@@ -34,7 +34,7 @@ t = 1/FS ;
 gain = p.Results.gain ;
 
 samples = floor( time / t ) ;
-Y = zeros( samples , ch ) ;
+Y = set_array( zeros( samples , ch ) ) ;
 
 if isempty( Y )
     t_vect = [] ;
@@ -61,9 +61,7 @@ end
 for i = 1:ch
     Y(:,i) = wave_f( t_v )' ;
 end
-
     Y = gain_set( Y , FS , gain , 'dB' ) ;
-
 end
 
 function [ tr ] = triangle_f( x )

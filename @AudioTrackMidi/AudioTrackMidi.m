@@ -20,7 +20,7 @@ classdef AudioTrackMidi < AudioTrack
             obj.sounds = snd ;
         end
         
-        [ time ] = midi2music( obj , varargin ) 
+        [time clock] = midi2music( obj , varargin ) 
         
     end
     
