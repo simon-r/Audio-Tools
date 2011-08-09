@@ -16,7 +16,7 @@ p.addParamValue('phase', 'no' , @(x)strcmpi(x,'yes') || ...
 p.parse(varargin{:});
 
 
-[ s_f phase freq mm ] = audio_fft( Y , FS , time_range ) ;
+[ s_f phase freq mm ] = audio_fft( Y , FS , time_range , 'smooth_lin' , 30 ) ;
 
 % r = 1:floor(size(s_f,1)/2) ;
 
