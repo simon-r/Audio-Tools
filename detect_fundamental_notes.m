@@ -20,10 +20,9 @@ dg(:,2) = -dg(:,2) ;
 
 peak=fpeak(dg(:,1),dg(:,2), 30 ) ;
 
-c = [-1 ; 1] ;
-cv = conv (  dg(:,2) , c , 'same' ) ;
+mi = find ( max( peak(:,2) ) == peak(:,2) ) ;
 
-mr = find( cv < 0 ) ;
+
 
 
 a = 1+1 ;
