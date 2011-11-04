@@ -9,8 +9,8 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 %
 % return:
 %   dr14: official dr14 value
-%   dB_peak: the largest value in the track (in dB)
-%   dB_rms: the Urms of the track.
+%   dB_peak: the largest value of the track (in dB)
+%   dB_rms: the Urms of the track (in dB).
 
 
 sizeY = size( Y ) ;
