@@ -1,6 +1,17 @@
-function [ dr14 ] = compute_DR14( Y , FS )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
+% compute_DR14 Compute the DR14 value according to the algorithm published
+% by the Pleasurize Your Music foundation.
+% for more details visit: http://www.pleasurizemusic.com/
+%
+% Input args:
+%       Y: an audio track (samples by channels)
+%       FS: sampling rate 
+%
+% return:
+%   dr14: official dr14 value
+%   dB_peak: the largest value in the track (in dB)
+%   dB_rms: the Urms of the track.
+
 
 sizeY = size( Y ) ;
 ch = sizeY(2) ;
@@ -69,6 +80,9 @@ end
 
 
 dr14 = round( mean( ch_dr14 ) ) ;
+
+peak = max( max( peaks ) ) ;
+dB_rms = u_rms( sum(Y,2) , FS ) ;
 
 
     function r = dr_rms( y ) 
