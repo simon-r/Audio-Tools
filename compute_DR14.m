@@ -76,14 +76,13 @@ for i = 1:ch
     
     rms_sum = rms_sum / rms_cum ;
     
-    ch_dr14(i) = - 20 * log10( sqrt( rms_sum ) * (1/bins_peak(ref_peak_bin)) ) ;
-      
+    ch_dr14(i) = -20 * log10( sqrt( rms_sum ) * (1/bins_peak(ref_peak_bin)) ) ;   
 end
 
 
 dr14 = round( mean( ch_dr14 ) ) ;
 
-peak = max( max( peaks ) ) ;
+dB_peak = max( max( peaks ) ) ;
 dB_rms = u_rms( sum(Y,2) , FS ) ;
 
 
