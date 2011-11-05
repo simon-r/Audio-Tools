@@ -30,15 +30,26 @@ if exist(FILE) ~= 2
     error('File not Found')
 end
 %%%%%% Location of the ".exe" Files
-s = which('oggread.m');
-ww = findstr('oggread.m',s);
-location = '/usr/bin'
+if ispc
+    location_oggdec = which('oggdec.exe');
+    location_ogginfo = which('ogginfo.exe');
+elseif isunix
+    location_oggdec = which('oggdec');
+    location_ogginfo = which('ogginfo');
+elseif ismac 
+    location_oggdec = which('oggdec');
+    location_ogginfo = which('ogginfo');
+else
+    location_oggdec = which('oggdec');
+    location_ogginfo = which('ogginfo');
+end
+%ww = findstr('oggread.m',s);
 %%%%Temporary file%%%%%%
 tmpfile = ['temp.wav'];
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% Info extraction using "ogginfo.exe"%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[stat_1,raw_info] = dos([location,'\ogginfo',' ', '"',FILE,'"']);
+[stat_1,raw_info] = dos([location_ogginfo , ' ' , '"',FILE,'"']);
 raw_info_channels_beg = findstr(raw_info,'Channels: ');
 raw_info_channels_end = findstr(raw_info,'Rate: ')-2;
 info_channels = raw_info(raw_info_channels_beg:raw_info_channels_end);
@@ -61,7 +72,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%% File Decoding using "oggdec.exe" %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[stat_2,raw_data] = dos([location,'/oggdec', ' -o ', tmpfile, ' ', '"',FILE,'"']);
+[stat_2,raw_data] = dos([location_oggdec, ' -o ', tmpfile, ' ', '"',FILE,'"']);
 if stat_1 == 1 | stat_2 == 1
     error('Error while decodong file. File may be corrupted')
 end

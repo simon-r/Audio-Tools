@@ -30,12 +30,18 @@ end
 if exist(FILE) ~= 2
     error('File not Found')
 end
-%%%%%% Location of the ".exe" Files
-s = which('flacread2.m');
-ww = findstr('flacread2.m',s);
-location = [s(1:ww-2),filesep];
-if ~exist([location,'flac.exe']) || ~exist([location,'metaflac.exe'])
-	location ='';
+
+if ispc
+    location_flac = which('flac.exe');
+    location_metaflac = which('metaflac.exe');
+elseif isunix
+    location_flac = which('flac');
+    location_metaflac = which('metaflac');
+elseif ismac
+    location_flac = which('flac');
+    location_metaflac = which('metaflac');
+else
+    return 
 end
 
 %%%%Temporary file%%%%%%
@@ -65,7 +71,7 @@ for I=1:nargin-1
 		error('not accepted');
 	end
 end	
-s = [location,'metaflac', ' --show-total-samples --show-channels --show-bps --show-sample-rate "', FILE,'"'];
+s = [location_metaflac, ' --show-total-samples --show-channels --show-bps --show-sample-rate "', FILE,'"'];
 [stat,data_title] = system(s);
 if stat ~= 0
 	return
@@ -82,9 +88,9 @@ if NBITS ~= 8 && NBITS ~= 16 && NBITS ~=24
 end
 FS = double(YR{4});
 if ~isempty(N12)
-s = [location,'flac', ' -d "', FILE ,'" -f ',' --sign=signed --endian=little  --force-raw-format ',sprintf(' --until=%d --skip=%d ',N12(2),N12(1)-1),' -o ', '"',tmpfile,'"'];
+s = [location_flac, ' -d "', FILE ,'" -f ',' --sign=signed --endian=little  --force-raw-format ',sprintf(' --until=%d --skip=%d ',N12(2),N12(1)-1),' -o ', '"',tmpfile,'"'];
 else
-s = [location,'flac', ' -d "', FILE ,'" -f ',' --sign=signed --endian=little --force-raw-format ',' -o ', '"',tmpfile,'"'];
+s = [location_flac, ' -d "', FILE ,'" -f ',' --sign=signed --endian=little --force-raw-format ',' -o ', '"',tmpfile,'"'];
 end
 [stat_2,raw_data] = system(s);
 if stat_2 == 1

@@ -91,9 +91,18 @@ if ispc
   ext = 'exe';
   rmcmd = 'del';
 end
-mpg123 = '/usr/bin/mpg123' ;
-mp3info = '/usr/bin/mp3info';
 
+if ispc() 
+    mpg123 = '.\audio_coding\mpg123' ;
+    mp3info = '.\audio_coding\mp3info';
+elseif isunix()
+    mpg123 = '/usr/bin/mpg123' ;
+    mp3info = '/usr/bin/mp3info';
+elseif ismac()
+    mpg123 = '/usr/bin/mpg123' ;
+    mp3info = '/usr/bin/mp3info';
+else
+    
 %%%%% Process input arguments
 if nargin < 2
   N = 0;
