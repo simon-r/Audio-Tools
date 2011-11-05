@@ -12,6 +12,10 @@ classdef DynamicRangeMeter  < hgsetget
         dr14 
     end
     
+    properties ( Dependent = true , SetAccess = private , GetAccess = public )
+        off_dr14 
+    end
+    
     methods
         
         function r = open( drm , name )
@@ -88,13 +92,51 @@ classdef DynamicRangeMeter  < hgsetget
             
             drm.dr14 = dr14 ;
         end
-
         
-        function print_dr( drm )
+        function odr = get.off_dr14( drm )
+            odr = round( mean( [drm.dr14(:,1).dr14] ) ) ;
+        end
+        
+        
+        function str = print_dr( drm )
+            
+            nl = sprintf('\n') ;
+            tb = sprintf('\t') ;
+            
+            str = ['----------------------------------------------------------------------------------------------' nl ];
+            str = [str 'Analyzed folder: ' ] ;
+            str = [str drm.name  nl ] ;
+            str = [str '----------------------------------------------------------------------------------------------' nl ];
+            str = [str 'DR' tb tb tb 'Peak' tb tb tb 'RMS' tb tb tb 'Filename' nl] ;
+            str = [str '----------------------------------------------------------------------------------------------' nl ];
+            
+            dr_cnt = size( drm.dr14 ) ;
+            for i = 1:dr_cnt
+                str = [str sprintf('DR%d \t\t\t %.2f %s \t\t\t' , drm.dr14(i,1).dr14 , drm.dr14(i,1).peak , 'dB' ) ];
+                str = [str sprintf( '%.2f %s \t\t\t %s \n' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) ];
+            end
+            
+            str = [str '----------------------------------------------------------------------------------------------' nl ];
+            str = [str nl ] ;
+            str = [str  sprintf( '%s\t%d\n' , 'Number of files:' , size(drm.dr14,1) ) ];
+            str = [str  sprintf( '%s\t%d\n' , 'Official DR value:' , drm.off_dr14 ) ];
+            str = [str nl ] ;
+            str = [str '==============================================================================================' nl ];
             
         end
         
+        
+        function f = sprint_drm( drm , file_name )
+            fid = fopen(file_name,'w');
+            
+            str = print_dr( drm ) ;
+            fprintf(fid, '%s', str);
+            
+            fclose(fid) ;
+        end
     end
+    
+
     
 end
 
