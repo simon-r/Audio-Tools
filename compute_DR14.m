@@ -40,8 +40,11 @@ for i=1:seg_cnt
     curr_sam = curr_sam + block_samples ;
 end
 
-bins = -100:0.01:0 ;
-bins_peak = 0:1e-04:1 ;
+delta_b = 100 / 10000 ;
+delta_bp = 1 / 10000 ;
+
+bins = (-100+delta_b/2):delta_b:(0-delta_b/2) ;
+bins_peak = (0+delta_bp/2):delta_bp:(1-delta_bp/2) ;
 
 hist_rms = hist( rms , bins ) ;
 hist_peaks = hist( peaks , bins_peak ) ;
