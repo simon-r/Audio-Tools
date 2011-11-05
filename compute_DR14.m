@@ -23,6 +23,14 @@ block_samples = block_time * FS ;
 
 seg_cnt = floor( sizeY(1) / block_samples ) ;
 
+if seg_cnt < 3
+    % track too short.
+    dr14 = 0 ;
+    dB_peak = -100 ;
+    dB_rms = -100 ;
+    return ;
+end ;
+
 curr_sam = 1 ;
 
 rms = zeros( seg_cnt , ch ) ;
@@ -86,7 +94,7 @@ end
 dr14 = round( mean( ch_dr14 ) ) ;
 
 dB_peak = decibel_u( max( max( peaks ) ) , 1 ) ;
-dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
+dB_rms = decibel_u( u_rms( sum(Y,2) ) , 1 ) ;
 
 
     function r = dr_rms( y ) 
