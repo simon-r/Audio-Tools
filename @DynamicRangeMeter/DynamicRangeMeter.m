@@ -35,18 +35,19 @@ classdef DynamicRangeMeter  < hgsetget
         
         
         function [dr14 f] = scan( drm , varargin )
-        
+            
             if not ( drm.is_open )
                 return
             end
             
+            dr14 = [] ;
+            
+            t = AudioTrack ;
             if not( drm.is_dir ) % is a file!
                 
-                t = AudioTrack ;
                 f = t.open( drm.name ) ;
                 
-                if f == false
-                    dr14 = [] ;
+                if f == false           
                     return ;
                 end
                 
@@ -57,7 +58,40 @@ classdef DynamicRangeMeter  < hgsetget
                 dr14.peak = dB_peak ;
                 dr14.rms = dB_rms ;
                 
+            else
+                
+                d = dir( drm.name ) ;
+                
+                f_cnt = size(d,1) ;
+                
+                j = 1 ;
+                for i = 1:f_cnt
+                    
+                    file_name = fullfile( drm.name , d(i).name ) ;
+                    f = t.open( file_name ) ;
+                    
+                    if f == false
+                        continue ;
+                    end
+                    
+                    [ dr dB_peak dB_rms ] = compute_DR14( t.Y , t.Fs ) ;
+                    
+                    dr14(j,1).name = d(i).name ;
+                    dr14(j,1).dr14 = dr ;
+                    dr14(j,1).peak = dB_peak ;
+                    dr14(j,1).rms = dB_rms ; 
+                    j = j + 1 ;
+                     
+                end
+                
             end
+            
+            drm.dr14 = dr14 ;
+        end
+
+        
+        function print_dr( drm )
+            
         end
         
     end
