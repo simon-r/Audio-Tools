@@ -70,7 +70,8 @@ classdef AudioTrack < hgsetget
             T = 1 / obj.Fs ;
         end
         
-        function open( at , file_name )
+        function r = open( at , file_name )
+            r = true ;
             if not ( isempty( regexp( file_name , '\.wav$', 'once' ) ) )
                 [ at.Y at.Fs at.nbits at.opts] = wavread( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.mp3$', 'once' ) ) )
@@ -79,6 +80,8 @@ classdef AudioTrack < hgsetget
                 [ at.Y at.Fs at.nbits at.opts] = flacread2( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.ogg$', 'once' ) ) )
                 [ at.Y at.Fs at.nbits at.opts] = oggread( file_name ) ;
+            else
+                r = false ;
             end
         end
         

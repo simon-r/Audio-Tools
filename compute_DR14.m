@@ -82,8 +82,8 @@ end
 
 dr14 = round( mean( ch_dr14 ) ) ;
 
-dB_peak = max( max( peaks ) ) ;
-dB_rms = u_rms( sum(Y,2) , FS ) ;
+dB_peak = decibel_u( max( max( peaks ) ) , 1 ) ;
+dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
 
 
     function r = dr_rms( y ) 
