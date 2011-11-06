@@ -34,6 +34,28 @@ classdef DynamicRangeMeter  < hgsetget
         end
         
         
+        function scan_dir( drm , dir_name )
+           if ~exist( dir_name , 'dir' ) == 7
+               disp( 'error: directory not found.' )
+               return ;
+           end
+           
+           drm.open( dir_name ) ;
+           drm.scan() ;
+                      
+           f1 = fullfile( dir_name , 'dr14.txt' ) ;
+           f2 = fullfile( dir_name , 'dr14_bbcode.txt' ) ;
+           
+           drm.fprint_drm( f1 , 'format' , 'txt' ) ;
+           drm.fprint_drm( f2 , 'format' , 'bbcode' ) ;
+           
+           odr = sprintf( 'DR = %d' , drm.off_dr14 ) ;
+           disp( odr ) ;
+           disp( 'done .... ' ) ;
+           
+        end
+        
+        
         function close( drm )
             drm.is_open = false ;
         end
@@ -148,9 +170,10 @@ classdef DynamicRangeMeter  < hgsetget
             bold_end = sprintf( '[/b]' ) ;
             
             
-            sep_row = [ tr_beg nl td_beg '------------------------------' td_end td_beg ... 
-                '------------------------------------' td_end td_beg '----------------------------' ... 
-                td_end td_beg '----------------------------' td_end nl tr_end nl ] ;
+            sep_row = [ tr_beg nl td_beg '-------------------' td_end ...
+                td_beg '-------------------' td_end ... 
+                td_beg '-------------------' td_end ... 
+                td_beg '--------------------------------------' td_end nl tr_end nl ] ;
             
             str = ['----------------------------------------------------------------------------------------------' nl ];
             str = [str bold_beg 'Analyzed folder:    ' ] ;
@@ -188,10 +211,22 @@ classdef DynamicRangeMeter  < hgsetget
             
         end
         
-        function f = fprint_drm( drm , file_name )
+        function f = fprint_drm( drm , file_name , varargin )
+            
+            p = inputParser ;
+            p.addParamValue('format', 'txt' , @(x)strcmpi(x,'txt') || ...
+                strcmpi(x,'bbcode') ) ;
+            
+            p.parse(varargin{:});
+            
             fid = fopen(file_name,'w');
             
-            str = print_dr( drm ) ;
+            if strcmpi( p.Results.format ,'txt' ) ;
+                str = print_dr( drm ) ;
+            elseif strcmpi( p.Results.format ,'bbcode' ) ;
+                str = print_tab_dr( drm ) ;
+            end
+            
             fprintf(fid, '%s', str);
             
             fclose(fid) ;
