@@ -10,10 +10,11 @@ classdef DynamicRangeMeter  < hgsetget
     
     properties ( SetAccess = private , GetAccess = public )
         dr14 
+        off_dr14
     end
     
     properties ( SetAccess = private , GetAccess = public )
-        off_dr14 
+        
     end
     
     methods
@@ -128,8 +129,8 @@ classdef DynamicRangeMeter  < hgsetget
 %             t = [drm.dr14(:,1).dr14] ;
 %             odr = round( mean( t ) ) ;
 %         end
-        
-        
+
+
         function str = print_dr( drm , varargin )
             
             nl = sprintf('\r\n') ;

@@ -1,4 +1,4 @@
-function m = dr14_meter( dir_name )
+function dr14_meter( dir_name )
 %DR14_METER Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -6,8 +6,6 @@ function m = dr14_meter( dir_name )
 d = DynamicRangeMeter ;
 
 d.scan_dir(dir_name) ;
-
-
 
 end
 
