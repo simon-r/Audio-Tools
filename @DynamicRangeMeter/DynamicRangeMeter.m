@@ -102,7 +102,7 @@ classdef DynamicRangeMeter  < hgsetget
         end
         
         
-        function str = print_dr( drm )
+        function str = print_dr( drm , varargin )
             
             nl = sprintf('\n') ;
             tb = sprintf('\t') ;
@@ -130,7 +130,65 @@ classdef DynamicRangeMeter  < hgsetget
         end
         
         
-        function f = sprint_drm( drm , file_name )
+        function str = print_tab_dr( drm , varargin )
+            
+            nl = sprintf('\n') ;
+            tb = sprintf('\t') ;
+            
+            table_beg = sprintf( '[table]' ) ;
+            table_end = sprintf( '[/table]' ) ;
+            
+            tr_beg = sprintf( '[tr]' ) ;
+            tr_end = sprintf( '[/tr]' ) ;
+            
+            td_beg = sprintf( '[td]' ) ;
+            td_end = sprintf( '[/td]' ) ;
+            
+            bold_beg = sprintf( '[b]' ) ;
+            bold_end = sprintf( '[/b]' ) ;
+            
+            
+            sep_row = [ tr_beg nl td_beg '------------------------------' td_end td_beg ... 
+                '------------------------------------' td_end td_beg '----------------------------' ... 
+                td_end td_beg '----------------------------' td_end nl tr_end nl ] ;
+            
+            str = ['----------------------------------------------------------------------------------------------' nl ];
+            str = [str bold_beg 'Analyzed folder:    ' ] ;
+            str = [str drm.name bold_end nl ] ;
+            str = [str '----------------------------------------------------------------------------------------------' nl ];
+            
+            str = [str table_beg nl];
+            
+            str = [str sep_row ] ;
+            
+            str = [str tr_beg nl];
+            str = [str td_beg 'DR' td_end td_beg 'Peak' td_end td_beg 'RMS' td_end td_beg 'Filename' td_end nl] ;
+            str = [str tr_end nl];
+            
+            str = [str sep_row ] ;
+            
+            dr_cnt = size( drm.dr14 ) ;
+            for i = 1:dr_cnt
+                str = [str tr_beg nl] ;
+                str = [str sprintf('%s DR%d %s %s %.2f %s %s %s ' , td_beg , ...
+                    drm.dr14(i,1).dr14 , td_end , td_beg , drm.dr14(i,1).peak , 'dB' , td_end , td_beg ) ];
+                str = [str sprintf( '%.2f %s %s %s %s %s' , drm.dr14(i,1).rms , 'dB' , ...
+                    td_end , td_beg , drm.dr14(i,1).name  , td_end ) nl ];
+                str = [str tr_end nl] ;
+            end
+            str = [str sep_row ] ;
+            str = [str table_end nl];
+            
+            str = [str '----------------------------------------------------------------------------------------------' nl ];
+            str = [str nl ] ;
+            str = [str  sprintf( '%s\t%d\n' , 'Number of files:' , size(drm.dr14,1) ) ];
+            str = [str  sprintf( '%s %s\t%d %s \n' , bold_beg , 'Official DR value:' , drm.off_dr14 , bold_end ) ];
+            str = [str nl ] ;
+            str = [str '==============================================================================================' nl ];
+            
+        end
+        
+        function f = fprint_drm( drm , file_name )
             fid = fopen(file_name,'w');
             
             str = print_dr( drm ) ;

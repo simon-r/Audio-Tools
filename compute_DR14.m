@@ -8,7 +8,7 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 %       FS: sampling rate 
 %
 % return:
-%   dr14: official dr14 value
+%   dr14: 'official' dr14 value
 %   dB_peak: the largest value of the track (in dB)
 %   dB_rms: the Urms of the track (in dB).
 %
