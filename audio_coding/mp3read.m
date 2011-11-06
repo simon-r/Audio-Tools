@@ -96,8 +96,8 @@ if ispc()
     mpg123 = '.\audio_coding\mpg123' ;
     mp3info = '.\audio_coding\mp3info';
 elseif isunix()
-    mpg123 = '/usr/bin/mpg123' ;
-    mp3info = '/usr/bin/mp3info';
+    mpg123 = locate_unix_cmd( 'mpg123' ) ;
+    mp3info = locate_unix_cmd( 'mp3info' ) ;
 elseif ismac()
     mpg123 = '/usr/bin/mpg123' ;
     mp3info = '/usr/bin/mp3info';
