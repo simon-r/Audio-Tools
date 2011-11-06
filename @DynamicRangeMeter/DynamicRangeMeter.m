@@ -12,7 +12,7 @@ classdef DynamicRangeMeter  < hgsetget
         dr14 
     end
     
-    properties ( Dependent = true , SetAccess = private , GetAccess = public )
+    properties ( SetAccess = private , GetAccess = public )
         off_dr14 
     end
     
@@ -39,6 +39,8 @@ classdef DynamicRangeMeter  < hgsetget
                disp( 'error: directory not found.' )
                return ;
            end
+           
+           disp( 'start ... ' )
            
            drm.open( dir_name ) ;
            drm.scan() ;
@@ -68,6 +70,7 @@ classdef DynamicRangeMeter  < hgsetget
             end
             
             dr14 = [] ;
+            off_dr = 0 ;
             
             t = AudioTrack ;
             if not( drm.is_dir ) % is a file!
@@ -111,17 +114,20 @@ classdef DynamicRangeMeter  < hgsetget
                     dr14(j,1).rms = dB_rms ; 
                     j = j + 1 ;
                      
+                    off_dr = off_dr + dr ;
                 end
                 
             end
             
+            drm.off_dr14 = round( off_dr / j ) ;
             drm.dr14 = dr14 ;
         end
         
         
-        function odr = get.off_dr14( drm )
-            odr = round( mean( [drm.dr14(:,1).dr14] ) ) ;
-        end
+%         function odr = get.off_dr14( drm )
+%             t = [drm.dr14(:,1).dr14] ;
+%             odr = round( mean( t ) ) ;
+%         end
         
         
         function str = print_dr( drm , varargin )
@@ -145,6 +151,7 @@ classdef DynamicRangeMeter  < hgsetget
             str = [str '----------------------------------------------------------------------------------------------' nl ];
             str = [str nl ] ;
             str = [str  sprintf( '%s\t%d\n' , 'Number of files:' , size(drm.dr14,1) ) ];
+            str = [str nl ] ;
             str = [str  sprintf( '%s\t%d\n' , 'Official DR value:' , drm.off_dr14 ) ];
             str = [str nl ] ;
             str = [str '==============================================================================================' nl ];
