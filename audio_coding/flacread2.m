@@ -35,8 +35,15 @@ if ispc
     location_flac = which('flac.exe');
     location_metaflac = which('metaflac.exe');
 elseif isunix
-    location_flac = which('flac');
-    location_metaflac = which('metaflac');
+    [f s1] = system('whereis -b flac') ;
+    [f s2] = system('whereis -b metaflac') ;
+    
+    c1 = regexp(s1,' ','split') ;
+    c2 = regexp(s2,' ','split') ;
+    
+    location_flac =  strrep( c1{2} , sprintf('\n') , '' ) ;
+    location_metaflac = strrep( c2{2} , sprintf('\n') , '' ) ;
+    
 elseif ismac
     location_flac = which('flac');
     location_metaflac = which('metaflac');

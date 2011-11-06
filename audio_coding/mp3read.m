@@ -101,7 +101,7 @@ elseif isunix()
 elseif ismac()
     mpg123 = '/usr/bin/mpg123' ;
     mp3info = '/usr/bin/mp3info';
-else
+end
     
 %%%%% Process input arguments
 if nargin < 2

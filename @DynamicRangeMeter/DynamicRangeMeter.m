@@ -33,6 +33,7 @@ classdef DynamicRangeMeter  < hgsetget
             end
         end
         
+        
         function close( drm )
             drm.is_open = false ;
         end
@@ -78,6 +79,8 @@ classdef DynamicRangeMeter  < hgsetget
                         continue ;
                     end
                     
+                    disp(  d(i).name ) ;
+                    
                     [ dr dB_peak dB_rms ] = compute_DR14( t.Y , t.Fs ) ;
                     
                     dr14(j,1).name = d(i).name ;
@@ -92,6 +95,7 @@ classdef DynamicRangeMeter  < hgsetget
             
             drm.dr14 = dr14 ;
         end
+        
         
         function odr = get.off_dr14( drm )
             odr = round( mean( [drm.dr14(:,1).dr14] ) ) ;
