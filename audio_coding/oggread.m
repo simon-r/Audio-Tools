@@ -34,8 +34,8 @@ if ispc
     location_oggdec = which('oggdec.exe');
     location_ogginfo = which('ogginfo.exe');
 elseif isunix
-    location_oggdec = which('oggdec');
-    location_ogginfo = which('ogginfo');
+    location_oggdec = locate_unix_cmd( 'oggdec' ) ;
+    location_ogginfo = locate_unix_cmd( 'ogginfo' ) ;
 elseif ismac 
     location_oggdec = which('oggdec');
     location_ogginfo = which('ogginfo');
