@@ -126,7 +126,7 @@ classdef DynamicRangeMeter  < hgsetget
         
         function str = print_dr( drm , varargin )
             
-            nl = sprintf('\n') ;
+            nl = sprintf('\r\n') ;
             tb = sprintf('\t') ;
             
             str = ['----------------------------------------------------------------------------------------------' nl ];
@@ -139,7 +139,7 @@ classdef DynamicRangeMeter  < hgsetget
             dr_cnt = size( drm.dr14 ) ;
             for i = 1:dr_cnt
                 str = [str sprintf('DR%d \t\t\t %.2f %s \t\t\t' , drm.dr14(i,1).dr14 , drm.dr14(i,1).peak , 'dB' ) ];
-                str = [str sprintf( '%.2f %s \t\t\t %s \n' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) ];
+                str = [str sprintf( '%.2f %s \t\t\t %s \n' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) nl ];
             end
             
             str = [str '----------------------------------------------------------------------------------------------' nl ];
@@ -154,7 +154,7 @@ classdef DynamicRangeMeter  < hgsetget
         
         function str = print_tab_dr( drm , varargin )
             
-            nl = sprintf('\n') ;
+            nl = sprintf('\r\n') ;
             tb = sprintf('\t') ;
             
             table_beg = sprintf( '[table]' ) ;
@@ -204,7 +204,8 @@ classdef DynamicRangeMeter  < hgsetget
             
             str = [str '----------------------------------------------------------------------------------------------' nl ];
             str = [str nl ] ;
-            str = [str  sprintf( '%s\t%d\n' , 'Number of files:' , size(drm.dr14,1) ) ];
+            str = [str  sprintf( '%s\t%d\n' , 'Number of files:' , size(drm.dr14,1) )];
+            str = [str nl ] ;
             str = [str  sprintf( '%s %s\t%d %s \n' , bold_beg , 'Official DR value:' , drm.off_dr14 , bold_end ) ];
             str = [str nl ] ;
             str = [str '==============================================================================================' nl ];
