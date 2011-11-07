@@ -131,7 +131,12 @@ classdef DynamicRangeMeter  < hgsetget
 
         function str = print_dr( drm , varargin )
             
-            nl = sprintf('\r\n') ;
+            if ispc()
+                nl = sprintf('\r\n') ;
+            else
+                nl = sprintf('\n') ;
+            end
+            
             tb = sprintf('\t') ;
             
             str = ['----------------------------------------------------------------------------------------------' nl ];
@@ -144,7 +149,7 @@ classdef DynamicRangeMeter  < hgsetget
             dr_cnt = size( drm.dr14 ) ;
             for i = 1:dr_cnt
                 str = [str sprintf('DR%d \t\t\t %.2f %s \t\t\t' , drm.dr14(i,1).dr14 , drm.dr14(i,1).peak , 'dB' ) ];
-                str = [str sprintf( '%.2f %s \t\t\t %s \n' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) nl ];
+                str = [str sprintf( '%.2f %s \t\t\t %s' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) nl ];
             end
             
             str = [str '----------------------------------------------------------------------------------------------' nl ];
@@ -160,8 +165,11 @@ classdef DynamicRangeMeter  < hgsetget
         
         function str = print_tab_dr( drm , varargin )
             
-            nl = sprintf('\r\n') ;
-            tb = sprintf('\t') ;
+            if ispc()
+                nl = sprintf('\r\n') ;
+            else
+                nl = sprintf('\n') ;
+            end
             
             table_beg = sprintf( '[table]' ) ;
             table_end = sprintf( '[/table]' ) ;
