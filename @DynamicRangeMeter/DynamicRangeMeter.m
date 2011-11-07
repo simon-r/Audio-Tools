@@ -12,11 +12,7 @@ classdef DynamicRangeMeter  < hgsetget
         dr14 
         off_dr14
     end
-    
-    properties ( SetAccess = private , GetAccess = public )
         
-    end
-    
     methods
         
         function r = open( drm , name )
@@ -112,16 +108,18 @@ classdef DynamicRangeMeter  < hgsetget
                     dr14(j,1).name = d(i).name ;
                     dr14(j,1).dr14 = dr ;
                     dr14(j,1).peak = dB_peak ;
-                    dr14(j,1).rms = dB_rms ; 
+                    dr14(j,1).rms = dB_rms ;
                     j = j + 1 ;
-                     
+                    
                     off_dr = off_dr + dr ;
                 end
                 
+                drm.off_dr14 = round( off_dr / (j-1) ) ;
+                drm.dr14 = dr14 ;
+                
             end
             
-            drm.off_dr14 = round( off_dr / j ) ;
-            drm.dr14 = dr14 ;
+            
         end
         
         
