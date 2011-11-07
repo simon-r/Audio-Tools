@@ -114,7 +114,7 @@ classdef DynamicRangeMeter  < hgsetget
                     off_dr = off_dr + dr ;
                 end
                 
-                drm.off_dr14 = round( off_dr / (j-1) ) ;
+                drm.off_dr14 = round( off_dr / (j-1) + 0.5 ) ;
                 drm.dr14 = dr14 ;
                 
             end

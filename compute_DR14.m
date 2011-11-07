@@ -18,7 +18,7 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 sizeY = size( Y ) ;
 ch = sizeY(2) ;
 
-block_time = 2 ;
+block_time = 3 ;
 block_samples = block_time * FS ;
 
 seg_cnt = floor( sizeY(1) / block_samples ) ;
