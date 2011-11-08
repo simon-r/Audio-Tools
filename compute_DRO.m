@@ -5,7 +5,7 @@ function [ drO dB_peak dB_rms ] = compute_DRO( Y , FS )
 sizeY = size( Y ) ;
 ch = sizeY(2) ;
 
-block_time = 3 ;
+block_time = 0.5 ;
 block_samples = block_time * FS ;
 
 seg_cnt = floor( sizeY(1) / block_samples ) ;
@@ -35,7 +35,20 @@ for i=1:seg_cnt
     curr_sam = curr_sam + block_samples ;
 end
 
-drO = 1 ;
+Ydr = mean ( peaks - rms , 2 ) ;
+
+[n bins] = hist( Ydr , 100 ) ;
+
+bar(bins,n) ;
+
+m = sum( n.*bins ) / sum( n ) ;
+
+sdev = sqrt( sum( n.*( bins - m ).^2 ) / sum( n ) ) ;
+
+drO = round ( ( m - 3 ) * sdev ) ;
+
+dB_peak = max( max( p ) ) ;
+dB_rms = mean( mean( rms ) ;
 
 end
 
