@@ -5,7 +5,7 @@ function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
 sizeY = size( Y ) ;
 ch = sizeY( 2 ) ;
 
-block_time = 0.5 ;
+block_time = 1 ;
 block_samples = block_time * FS ;
 
 threshold = 0.15 ;
