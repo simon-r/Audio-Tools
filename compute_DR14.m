@@ -14,7 +14,6 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 %
 % Copyright (c) 2011 Simone Riva
 
-
 sizeY = size( Y ) ;
 ch = sizeY(2) ;
 
