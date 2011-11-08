@@ -50,14 +50,14 @@ i = find( n > max_freq*threshold ) ;
 n = n(i) ;
 bins = bins(i) ;
 
-mb = mean( bins ) ;
+% mb = mean( bins ) ;
+% 
+% i = find( bins > mb ) ;
+% 
+% n = n(i) ;
+% bins = bins(i) ;
 
-i = find( bins > mb ) ;
-
-n = n(i) ;
-bins = bins(i) ;
-
-bar(bins,n) ;
+%bar(bins,n) ;
 
 hi.bins = bins ;
 hi.n = n ;
