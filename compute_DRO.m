@@ -57,7 +57,7 @@ i = find( bins > mb ) ;
 n = n(i) ;
 bins = bins(i) ;
 
-%bar(bins,n) ;
+bar(bins,n) ;
 
 hi.bins = bins ;
 hi.n = n ;
