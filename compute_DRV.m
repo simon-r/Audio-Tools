@@ -1,6 +1,6 @@
 function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%compute_DRV compute the DRV of an audio track
+%   this procedure measure the dynamic vivacity of an audio track.
 
 sizeY = size( Y ) ;
 ch = sizeY( 2 ) ;
@@ -66,7 +66,7 @@ m = sum( n.*bins ) / sum( n ) ;
 
 sdev = sqrt( sum( n.*( bins - m ).^2 ) / sum( n ) ) ;
 
-drO = round ( ( m - 3 ) * 1 ) ;
+drO = round ( ( m - 3 ) ) ;
 
 dB_peak = max( max( peaks ) ) ;
 dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
