@@ -29,7 +29,7 @@ for i=1:seg_cnt
     r = curr_sam:(curr_sam+block_samples-1) ;
     for j=1:ch
         
-        rms(i,j) = decibel_u( u_rms( Y(r,j) , 1 ) , 1 ) ;
+        rms(i,j) = decibel_u( u_rms( Y(r,j) , FS ) , 1 ) ;
         
         p = decibel_u( max( abs( Y(r,j) ) ) , 1 ) ;
         peaks(i,j) = p ;
@@ -58,8 +58,8 @@ sdev = sqrt( sum( n.*( bins - m ).^2 ) / sum( n ) ) ;
 
 drO = round ( ( m - 3 ) * sdev ) ;
 
-dB_peak = max( max( p ) ) ;
-dB_rms = mean( mean( rms ) ) ;
+dB_peak = max( max( peaks ) ) ;
+dB_rms = mean( mean( rms(rms > -1000 & rms < 1000 ) ) ) ;
 
 end
 
