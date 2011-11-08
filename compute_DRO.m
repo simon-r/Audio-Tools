@@ -3,7 +3,7 @@ function [ drO dB_peak dB_rms hi ] = compute_DRO( Y , FS )
 %   Detailed explanation goes here
 
 sizeY = size( Y ) ;
-ch = sizeY(2) ;
+ch = sizeY( 2 ) ;
 
 block_time = 0.5 ;
 block_samples = block_time * FS ;
@@ -41,13 +41,16 @@ Ydr = mean ( peaks - rms , 2 ) ;
 
 [n bins] = hist( Ydr , 100 ) ;
 
+hi.on = n ;
+hi.obins = bins ;
+
 max_freq = max( n ) ;
 i = find( n > max_freq*threshold ) ;
 
 n = n(i) ;
 bins = bins(i) ;
 
-bar(bins,n) ;
+%bar(bins,n) ;
 
 hi.bins = bins ;
 hi.n = n ;
@@ -56,10 +59,10 @@ m = sum( n.*bins ) / sum( n ) ;
 
 sdev = sqrt( sum( n.*( bins - m ).^2 ) / sum( n ) ) ;
 
-drO = round ( ( m - 3 ) * sdev ) ;
+drO = round ( ( m - 3 ) * 1 ) ;
 
 dB_peak = max( max( peaks ) ) ;
-dB_rms = mean( mean( rms(rms > -1000 & rms < 1000 ) ) ) ;
+dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
 
 end
 
