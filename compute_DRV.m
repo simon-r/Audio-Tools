@@ -1,4 +1,4 @@
-function [ drO dB_peak dB_rms hi ] = compute_DRO( Y , FS )
+function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
