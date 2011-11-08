@@ -35,16 +35,18 @@ classdef DynamicRangeMeter  < hgsetget
             
             p = inputParser ;
             p.addParamValue('dr_prodedure', 'dr14' , @(x)strcmpi(x,'dr14') || ...
-                strcmpi(x,'dro') ) ;
+                strcmpi(x,'drv') ) ;
             
             p.parse(varargin{:});
             
             if strcmpi( p.Results.dr_prodedure , 'dr14' )
                 file_txt = 'dr14.txt' ;
                 file_bbcode = 'dr14_bbcode.txt' ;
+                dr_t = 'DR14'
             else
-                file_txt = 'drO.txt' ;
-                file_bbcode = 'drO_bbcode.txt' ;
+                file_txt = 'drV.txt' ;
+                file_bbcode = 'drV_bbcode.txt' ;
+                dr_t = 'DRV' ;
             end
             
             if ~exist( dir_name , 'dir' ) == 7
@@ -63,7 +65,7 @@ classdef DynamicRangeMeter  < hgsetget
             drm.fprint_drm( f1 , 'format' , 'txt' ) ;
             drm.fprint_drm( f2 , 'format' , 'bbcode' ) ;
             
-            odr = sprintf( 'DR = %d' , drm.off_dr14 ) ;
+            odr = sprintf( '%s = %d' , dr_t , drm.off_dr14 ) ;
             disp( odr ) ;
             disp( 'done .... ' ) ;
             
@@ -79,13 +81,13 @@ classdef DynamicRangeMeter  < hgsetget
             
             p = inputParser ;
             p.addParamValue('dr_prodedure', 'dr14' , @(x)strcmpi(x,'dr14') || ...
-                strcmpi(x,'dro') ) ;
+                strcmpi(x,'drv') ) ;
             p.parse(varargin{:});
             
             if strcmpi( p.Results.dr_prodedure , 'dr14' )
                 compute_dr = @compute_DR14 ;
             else
-                compute_dr = @compute_DRO ;
+                compute_dr = @compute_DRV ;
             end
             
             
