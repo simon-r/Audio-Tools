@@ -36,7 +36,7 @@ classdef DynamicRangeMeter  < hgsetget
         
         
         function scan_dir( drm , dir_name )
-           if ~exist( dir_name , 'dir' ) == 7
+           if ~exist( dir_name , 'dir' )
                disp( 'error: directory not found.' )
                return ;
            end
