@@ -41,7 +41,7 @@ classdef DynamicRangeMeter  < hgsetget
             if strcmpi( p.Results.dr_prodedure , 'dr14' )
                 file_txt = 'dr14.txt' ;
                 file_bbcode = 'dr14_bbcode.txt' ;
-                dr_t = 'DR14'
+                dr_t = 'DR14' ;
             else
                 file_txt = 'drV.txt' ;
                 file_bbcode = 'drV_bbcode.txt' ;
@@ -120,6 +120,7 @@ classdef DynamicRangeMeter  < hgsetget
                 f_cnt = size(d,1) ;
                 
                 j = 1 ;
+                
                 for i = 1:f_cnt
                     
                     file_name = fullfile( drm.name , d(i).name ) ;
