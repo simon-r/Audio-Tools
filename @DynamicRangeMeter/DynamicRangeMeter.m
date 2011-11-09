@@ -5,16 +5,12 @@ classdef DynamicRangeMeter  < hgsetget
     properties ( SetAccess = private , GetAccess = private )
         is_dir
         is_open = false ;
-        name 
+        name
     end
     
     properties ( SetAccess = private , GetAccess = public )
-        dr14 
+        dr14
         off_dr14
-    end
-    
-    properties ( SetAccess = private , GetAccess = public )
-        
     end
     
     methods
@@ -27,35 +23,51 @@ classdef DynamicRangeMeter  < hgsetget
                 r = 2 ;
             elseif exist( name , 'file' ) == 2
                 drm.is_dir = false ;
-                drm.is_open = true ; 
+                drm.is_open = true ;
                 r = 1 ;
             else
                 r = 0 ;
             end
         end
         
-        
-        function scan_dir( drm , dir_name )
-           if ~exist( dir_name , 'dir' )
-               disp( 'error: directory not found.' )
-               return ;
-           end
-           
-           disp( 'start ... ' )
-           
-           drm.open( dir_name ) ;
-           drm.scan() ;
-                      
-           f1 = fullfile( dir_name , 'dr14.txt' ) ;
-           f2 = fullfile( dir_name , 'dr14_bbcode.txt' ) ;
-           
-           drm.fprint_drm( f1 , 'format' , 'txt' ) ;
-           drm.fprint_drm( f2 , 'format' , 'bbcode' ) ;
-           
-           odr = sprintf( 'DR = %d' , drm.off_dr14 ) ;
-           disp( odr ) ;
-           disp( 'done .... ' ) ;
-           
+        function scan_dir( drm , dir_name , varargin )
+            
+            p = inputParser ;
+            p.addParamValue('dr_prodedure', 'dr14' , @(x)strcmpi(x,'dr14') || ...
+                strcmpi(x,'drv') ) ;
+            
+            p.parse(varargin{:});
+            
+            if strcmpi( p.Results.dr_prodedure , 'dr14' )
+                file_txt = 'dr14.txt' ;
+                file_bbcode = 'dr14_bbcode.txt' ;
+                dr_t = 'DR14'
+            else
+                file_txt = 'drV.txt' ;
+                file_bbcode = 'drV_bbcode.txt' ;
+                dr_t = 'DRV' ;
+            end
+            
+            if ~exist( dir_name , 'dir' ) == 7
+                disp( 'error: directory not found.' )
+                return ;
+            end
+            
+            disp( 'start ... ' )
+            
+            drm.open( dir_name ) ;
+            drm.scan( varargin{:} ) ;
+            
+            f1 = fullfile( dir_name , file_txt ) ;
+            f2 = fullfile( dir_name , file_bbcode ) ;
+            
+            drm.fprint_drm( f1 , 'format' , 'txt' ) ;
+            drm.fprint_drm( f2 , 'format' , 'bbcode' ) ;
+            
+            odr = sprintf( '%s = %d' , dr_t , drm.off_dr14 ) ;
+            disp( odr ) ;
+            disp( 'done .... ' ) ;
+            
         end
         
         
@@ -65,6 +77,18 @@ classdef DynamicRangeMeter  < hgsetget
         
         
         function [dr14 f] = scan( drm , varargin )
+            
+            p = inputParser ;
+            p.addParamValue('dr_prodedure', 'dr14' , @(x)strcmpi(x,'dr14') || ...
+                strcmpi(x,'drv') ) ;
+            p.parse(varargin{:});
+            
+            if strcmpi( p.Results.dr_prodedure , 'dr14' )
+                compute_dr = @compute_DR14 ;
+            else
+                compute_dr = @compute_DRV ;
+            end
+            
             
             if not ( drm.is_open )
                 return
@@ -78,11 +102,11 @@ classdef DynamicRangeMeter  < hgsetget
                 
                 f = t.open( drm.name ) ;
                 
-                if f == false           
+                if f == false
                     return ;
                 end
                 
-                [ dr dB_peak dB_rms ] = compute_DR14( t.Y , t.Fs ) ;
+                [ dr dB_peak dB_rms ] = compute_dr( t.Y , t.Fs ) ;
                 
                 dr14.name = drm.name ;
                 dr14.dr14 = dr ;
@@ -107,33 +131,40 @@ classdef DynamicRangeMeter  < hgsetget
                     
                     disp(  d(i).name ) ;
                     
-                    [ dr dB_peak dB_rms ] = compute_DR14( t.Y , t.Fs ) ;
+                    [ dr dB_peak dB_rms ] = compute_dr( t.Y , t.Fs ) ;
                     
                     dr14(j,1).name = d(i).name ;
                     dr14(j,1).dr14 = dr ;
                     dr14(j,1).peak = dB_peak ;
-                    dr14(j,1).rms = dB_rms ; 
+                    dr14(j,1).rms = dB_rms ;
                     j = j + 1 ;
-                     
+                    
                     off_dr = off_dr + dr ;
                 end
                 
+                drm.off_dr14 = round( off_dr / (j-1) + 0.5 ) ;
+                drm.dr14 = dr14 ;
+                
             end
             
-            drm.off_dr14 = round( off_dr / j ) ;
-            drm.dr14 = dr14 ;
+            
         end
         
         
-%         function odr = get.off_dr14( drm )
-%             t = [drm.dr14(:,1).dr14] ;
-%             odr = round( mean( t ) ) ;
-%         end
-
-
+        %         function odr = get.off_dr14( drm )
+        %             t = [drm.dr14(:,1).dr14] ;
+        %             odr = round( mean( t ) ) ;
+        %         end
+        
+        
         function str = print_dr( drm , varargin )
             
-            nl = sprintf('\r\n') ;
+            if ispc()
+                nl = sprintf('\r\n') ;
+            else
+                nl = sprintf('\n') ;
+            end
+            
             tb = sprintf('\t') ;
             
             str = ['----------------------------------------------------------------------------------------------' nl ];
@@ -146,7 +177,7 @@ classdef DynamicRangeMeter  < hgsetget
             dr_cnt = size( drm.dr14 ) ;
             for i = 1:dr_cnt
                 str = [str sprintf('DR%d \t\t\t %.2f %s \t\t\t' , drm.dr14(i,1).dr14 , drm.dr14(i,1).peak , 'dB' ) ];
-                str = [str sprintf( '%.2f %s \t\t\t %s \n' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) nl ];
+                str = [str sprintf( '%.2f %s \t\t\t %s' , drm.dr14(i,1).rms , 'dB' , drm.dr14(i,1).name ) nl ];
             end
             
             str = [str '----------------------------------------------------------------------------------------------' nl ];
@@ -162,8 +193,11 @@ classdef DynamicRangeMeter  < hgsetget
         
         function str = print_tab_dr( drm , varargin )
             
-            nl = sprintf('\r\n') ;
-            tb = sprintf('\t') ;
+            if ispc()
+                nl = sprintf('\r\n') ;
+            else
+                nl = sprintf('\n') ;
+            end
             
             table_beg = sprintf( '[table]' ) ;
             table_end = sprintf( '[/table]' ) ;
@@ -178,9 +212,10 @@ classdef DynamicRangeMeter  < hgsetget
             bold_end = sprintf( '[/b]' ) ;
             
             
-            sep_row = [ tr_beg nl td_beg '-------------------' td_end ...
-                td_beg '-------------------' td_end ... 
-                td_beg '-------------------' td_end ... 
+            col_size = '------------' ;
+            sep_row = [ tr_beg nl td_beg col_size td_end ...
+                td_beg col_size td_end ...
+                td_beg col_size td_end ...
                 td_beg '--------------------------------------' td_end nl tr_end nl ] ;
             
             str = ['----------------------------------------------------------------------------------------------' nl ];
@@ -240,9 +275,12 @@ classdef DynamicRangeMeter  < hgsetget
             
             fclose(fid) ;
         end
+        
+        
+        
     end
     
-
+    
     
 end
 

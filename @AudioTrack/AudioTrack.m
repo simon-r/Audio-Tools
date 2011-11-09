@@ -80,6 +80,8 @@ classdef AudioTrack < hgsetget
                 [ at.Y at.Fs at.nbits at.opts] = flacread2( file_name ) ;
             elseif not ( isempty( regexp( file_name , '\.ogg$', 'once' ) ) )
                 [ at.Y at.Fs at.nbits at.opts] = oggread( file_name ) ;
+            elseif not ( isempty( regexp( file_name , '\.m4a$', 'once' ) ) )
+                [ at.Y at.Fs at.nbits at.opts] = m4aread( file_name ) ;
             else
                 r = false ;
             end

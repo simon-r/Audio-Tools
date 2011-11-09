@@ -14,11 +14,10 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 %
 % Copyright (c) 2011 Simone Riva
 
-
 sizeY = size( Y ) ;
 ch = sizeY(2) ;
 
-block_time = 2 ;
+block_time = 3 ;
 block_samples = block_time * FS ;
 
 seg_cnt = floor( sizeY(1) / block_samples ) ;
@@ -95,7 +94,6 @@ dr14 = round( mean( ch_dr14 ) ) ;
 
 dB_peak = decibel_u( max( max( peaks ) ) , 1 ) ;
 dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
-
 
     function r = dr_rms( y ) 
         r = sqrt ( 2 * sum( y.^2 ) / size( y , 1 ) ) ;
