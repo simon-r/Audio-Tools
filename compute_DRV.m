@@ -1,6 +1,17 @@
 function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
 %compute_DRV compute the DRV of an audio track
 %   this procedure measure the dynamic vivacity of an audio track.
+%
+% Input args:
+%       Y: an audio track (samples by channels)
+%       FS: sampling rate 
+%
+% return:
+%   dr14: 'official' dr14 value
+%   dB_peak: the largest value of the track (in dB)
+%   dB_rms: the Urms of the track (in dB).
+%
+% Copyright (c) 2011 Simone Riva
 
 sizeY = size( Y ) ;
 ch = sizeY( 2 ) ;
