@@ -1,4 +1,4 @@
-function [Y,SR,NBITS,OPTS] = m4aread(FILE,N,MONO,DOWNSAMP,DELAY)
+function [Y SR NBITS OPTS] = m4aread(FILE,N,MONO,DOWNSAMP,DELAY)
 % M4AREAD   Read mpeg 4 audio (AAC) file via use of external binaries.
 %   Y = M4AREAD(FILE) reads an m4a-encoded audio file into the
 %     vector Y just like wavread reads a wav-encoded file (one channel 
@@ -73,7 +73,18 @@ function [Y,SR,NBITS,OPTS] = m4aread(FILE,N,MONO,DOWNSAMP,DELAY)
 
 
 % find our baseline directory
-path = fileparts(which('m4aread'));
+%path = fileparts(which('m4aread'));
+
+if ispc() 
+    path = fileparts(which('m4aread')) ;
+    ext = 'exe';
+    faad = fullfile(path,['faad.',ext]);
+elseif isunix()
+    path = locate_unix_cmd( 'faad' ) ;
+    faad = path ;
+elseif ismac()
+   fooo = 1 ;
+end
 
 % %%%%% Directory for temporary file (if needed)
 % % Try to read from environment, or use /tmp if it exists, or use CWD
@@ -94,12 +105,12 @@ rmcmd = 'rm';
 
 %%%%%% Location of the binaries - attempt to choose automatically
 %%%%%% (or edit to be hard-coded for your installation)
-ext = lower(computer);
-if ispc
-  ext = 'exe';
-  rmcmd = 'del';
-end
-faad = fullfile(path,['faad.',ext]);
+% ext = lower(computer);
+% if ispc
+%   
+%   rmcmd = 'del';
+% end
+
 %faad = '/opt/local/bin/faad';
 
 %%%%% Process input arguments
