@@ -18,6 +18,8 @@ sizeY = size( Y ) ;
 ch = sizeY(2) ;
 
 block_time = 3 ;
+cut_best_bins = 0.2 ;
+
 block_samples = block_time * FS ;
 
 seg_cnt = floor( sizeY(1) / block_samples ) ;
@@ -58,7 +60,11 @@ hist_peaks = hist( peaks , bins_peak ) ;
 
 ch_dr14 = zeros( ch , 1 ) ;
 
-n_blk = floor( seg_cnt * 0.2 ) ;
+n_blk = floor( seg_cnt * cut_best_bins ) ;
+% if n_blk / seg_cnt < seg_cnt * 0.2
+%     n_blk = n_blk + 1 ;
+% end
+
 
 for i = 1:ch
 
