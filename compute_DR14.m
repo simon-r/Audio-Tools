@@ -61,9 +61,9 @@ hist_peaks = hist( peaks , bins_peak ) ;
 ch_dr14 = zeros( ch , 1 ) ;
 
 n_blk = floor( seg_cnt * cut_best_bins ) ;
-% if n_blk / seg_cnt < seg_cnt * 0.2
-%     n_blk = n_blk + 1 ;
-% end
+if n_blk == 0
+    n_blk = 1 ;
+end 
 
 
 for i = 1:ch
@@ -84,10 +84,16 @@ for i = 1:ch
     j = size( indx_hrms , 1 ) ;
     while rms_cum <= n_blk
         b_cnt = hist_rms(indx_hrms(j) , i ) ;
-        
+               
         rms_sum = rms_sum + 10^( bins( indx_hrms(j) ) / 20 )^2 * b_cnt ;
         rms_cum = rms_cum + b_cnt ;
         j = j - 1 ;
+    end
+    
+    if rms_cum > n_blk 
+        j = j + 1 ;
+        rms_sum = rms_sum - 10^( bins( indx_hrms(j) ) / 20 )^2 * ( rms_cum - n_blk ) ;
+        rms_cum = rms_cum - ( rms_cum - n_blk ) ;
     end
     
     rms_sum = rms_sum / rms_cum ;
