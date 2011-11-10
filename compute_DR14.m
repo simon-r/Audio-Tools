@@ -5,7 +5,7 @@ function [ dr14 dB_peak dB_rms ] = compute_DR14( Y , FS )
 %
 % Input args:
 %       Y: an audio track (samples by channels)
-%       FS: sampling rate 
+%       FS: sampling rate
 %
 % return:
 %   dr14: 'official' dr14 value
@@ -39,85 +39,40 @@ peaks = zeros( seg_cnt , ch ) ;
 
 for i=1:seg_cnt
     r = curr_sam:(curr_sam+block_samples-1) ;
-    for j=1:ch
-        
-        rms(i,j) = decibel_u( dr_rms( Y(r,j) ) , 1 ) ;
-        
-        p = max( abs( Y(r,j) ) ) ;
-        peaks(i,j) = p ;
-    end
+    rms(i,:) = decibel_u( dr_rms( Y(r,:) ) , 1 ) ;
+    
+    p = max( abs( Y(r,:) ) ) ;
+    peaks(i,:) = p ;
+    
     curr_sam = curr_sam + block_samples ;
 end
 
-delta_b = 100 / 10000 ;
-%delta_bp = 1 / 10000 ;
-
-bins = (-100+delta_b/2):delta_b:(0-delta_b/2) ;
-%bins_peak = (0+delta_bp/2):delta_bp:(1-delta_bp/2) ;
-
-hist_rms = hist( rms , bins ) ;
-%hist_peaks = hist( peaks , bins_peak ) ;
-
 peaks = sort( peaks ) ;
-
-ch_dr14 = zeros( ch , 1 ) ;
+rms = sort( rms ) ;
 
 n_blk = floor( seg_cnt * cut_best_bins ) ;
 if n_blk == 0
     n_blk = 1 ;
-end 
-
-
-for i = 1:ch
-
-%    indx_hp = find( hist_peaks(:,i) > 0 ) ;
-    
-%     if size(indx_hp,1) > 1
-%         ref_peak_bin = indx_hp(size(indx_hp,1) - 1) ;
-%     else
-%         ref_peak_bin = indx_hp(size(indx_hp,1)) ;
-%     end
-    
-    indx_hrms = find( hist_rms(:,i) > 0 ) ;
-    
-    rms_sum = 0 ;
-    rms_cum = 0 ;
-    
-    j = size( indx_hrms , 1 ) ;
-    while rms_cum <= n_blk
-        b_cnt = hist_rms(indx_hrms(j) , i ) ;
-               
-        rms_sum = rms_sum + 10^( bins( indx_hrms(j) ) / 20 )^2 * b_cnt ;
-        rms_cum = rms_cum + b_cnt ;
-        j = j - 1 ;
-    end
-    
-    if rms_cum > n_blk 
-        j = j + 1 ;
-        rms_sum = rms_sum - 10^( bins( indx_hrms(j) ) / 20 )^2 * ( rms_cum - n_blk ) ;
-        rms_cum = rms_cum - ( rms_cum - n_blk ) ;
-    end
-    
-    rms_sum = rms_sum / rms_cum ;
-    
-    ch_dr14(i) = -20 * log10( sqrt( rms_sum ) * (1/peaks(seg_cnt-1,i)) ) ;
-    
-    if rms_sum <  1/(2^24) 
-        ch_dr14(i) = 0 ;
-    end
-    
 end
 
+r = seg_cnt:-1:(seg_cnt-n_blk+1) ;
+rms_sum = sum(  ( 10.^( rms(r,:) / 20 ) ).^2 , 1 ) ;
+
+rms_sum = rms_sum / n_blk ;
+
+ch_dr14 = -20 * log10( sqrt( rms_sum ) .* (1./peaks(seg_cnt-1,:)) ) ;
+
+err_i = ( rms_sum <  1/(2^24) ) ;
+ch_dr14(err_i) = 0 ;
 
 dr14 = round( mean( ch_dr14 ) ) ;
 
 dB_peak = decibel_u( max( max( peaks ) ) , 1 ) ;
 dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
 
-    function r = dr_rms( y ) 
+    function r = dr_rms( y )
         r = sqrt ( 2 * sum( y.^2 ) / size( y , 1 ) ) ;
     end
-
 end
 
 
