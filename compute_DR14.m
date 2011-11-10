@@ -50,13 +50,15 @@ for i=1:seg_cnt
 end
 
 delta_b = 100 / 10000 ;
-delta_bp = 1 / 10000 ;
+%delta_bp = 1 / 10000 ;
 
 bins = (-100+delta_b/2):delta_b:(0-delta_b/2) ;
-bins_peak = (0+delta_bp/2):delta_bp:(1-delta_bp/2) ;
+%bins_peak = (0+delta_bp/2):delta_bp:(1-delta_bp/2) ;
 
 hist_rms = hist( rms , bins ) ;
-hist_peaks = hist( peaks , bins_peak ) ;
+%hist_peaks = hist( peaks , bins_peak ) ;
+
+peaks = sort( peaks ) ;
 
 ch_dr14 = zeros( ch , 1 ) ;
 
@@ -68,13 +70,13 @@ end
 
 for i = 1:ch
 
-    indx_hp = find( hist_peaks(:,i) > 0 ) ;
+%    indx_hp = find( hist_peaks(:,i) > 0 ) ;
     
-    if size(indx_hp,1) > 1
-        ref_peak_bin = indx_hp(size(indx_hp,1) - 1) ;
-    else
-        ref_peak_bin = indx_hp(size(indx_hp,1)) ;
-    end
+%     if size(indx_hp,1) > 1
+%         ref_peak_bin = indx_hp(size(indx_hp,1) - 1) ;
+%     else
+%         ref_peak_bin = indx_hp(size(indx_hp,1)) ;
+%     end
     
     indx_hrms = find( hist_rms(:,i) > 0 ) ;
     
@@ -98,7 +100,12 @@ for i = 1:ch
     
     rms_sum = rms_sum / rms_cum ;
     
-    ch_dr14(i) = -20 * log10( sqrt( rms_sum ) * (1/bins_peak(ref_peak_bin)) ) ;   
+    ch_dr14(i) = -20 * log10( sqrt( rms_sum ) * (1/peaks(seg_cnt-1,i)) ) ;
+    
+    if rms_sum <  1/(2^24) 
+        ch_dr14(i) = 0 ;
+    end
+    
 end
 
 
