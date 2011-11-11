@@ -120,7 +120,7 @@ classdef DynamicRangeMeter  < hgsetget
                 f_cnt = size(d,1) ;
                 
                 j = 1 ;
-                
+                            
                 for i = 1:f_cnt
                     
                     file_name = fullfile( drm.name , d(i).name ) ;

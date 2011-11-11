@@ -40,7 +40,6 @@ peaks = zeros( seg_cnt , ch ) ;
 for i=1:seg_cnt
     r = curr_sam:(curr_sam+block_samples-1) ;
     rms(i,:) = decibel_u( dr_rms( Y(r,:) ) , 1 ) ;
-    
     p = max( abs( Y(r,:) ) ) ;
     peaks(i,:) = p ;
     
@@ -50,7 +49,7 @@ end
 peaks = sort( peaks ) ;
 rms = sort( rms ) ;
 
-n_blk = floor( seg_cnt * cut_best_bins ) ;
+n_blk = round( seg_cnt * cut_best_bins) ;
 if n_blk == 0
     n_blk = 1 ;
 end
