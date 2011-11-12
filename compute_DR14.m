@@ -39,7 +39,7 @@ peaks = zeros( seg_cnt , ch ) ;
 
 for i=1:seg_cnt
     r = curr_sam:(curr_sam+block_samples-1) ;
-    rms(i,:) = decibel_u( dr_rms( Y(r,:) ) , 1 ) ;
+    rms(i,:) = dr_rms( Y(r,:) ) ;
     p = max( abs( Y(r,:) ) ) ;
     peaks(i,:) = p ;
     
@@ -54,8 +54,8 @@ if n_blk == 0
     n_blk = 1 ;
 end
 
-r = seg_cnt:-1:(seg_cnt-n_blk+1) ;
-rms_sum = sum(  ( 10.^( rms(r,:) / 20 ) ).^2 , 1 ) ;
+r = (seg_cnt-n_blk+1):seg_cnt ;
+rms_sum = sum(  ( rms(r,:) ).^2 , 1 ) ;
 
 rms_sum = rms_sum / n_blk ;
 
