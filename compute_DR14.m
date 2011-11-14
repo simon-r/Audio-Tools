@@ -20,9 +20,15 @@ ch = sizeY(2) ;
 block_time = 3 ;
 cut_best_bins = 0.2 ;
 
-block_samples = block_time * FS ;
+if FS == 44100
+    delta_sample = 60 ;
+else
+    delta_sample = 0 ;
+end
 
-seg_cnt = floor( sizeY(1) / block_samples ) ;
+block_samples = block_time * ( FS + delta_sample) ;
+
+seg_cnt = floor( sizeY(1) / block_samples ) + 1 ;
 
 if seg_cnt < 3
     % track too short.
@@ -37,19 +43,22 @@ curr_sam = 1 ;
 rms = zeros( seg_cnt , ch ) ;
 peaks = zeros( seg_cnt , ch ) ;
 
-for i=1:seg_cnt
+for i=1:(seg_cnt-1)
     r = curr_sam:(curr_sam+block_samples-1) ;
     rms(i,:) = dr_rms( Y(r,:) ) ;
-    p = max( abs( Y(r,:) ) ) ;
-    peaks(i,:) = p ;
-    
+    peaks(i,:) = max( abs( Y(r,:) ) ) ;
     curr_sam = curr_sam + block_samples ;
 end
+
+r=curr_sam:sizeY(1) ;
+rms(seg_cnt,:) = dr_rms( Y(r,:) ) ;
+peaks(seg_cnt,:) = max( abs( Y(r,:) ) ) ;
+
 
 peaks = sort( peaks ) ;
 rms = sort( rms ) ;
 
-n_blk = round( seg_cnt * cut_best_bins) ;
+n_blk = floor( seg_cnt * cut_best_bins ) ;
 if n_blk == 0
     n_blk = 1 ;
 end
