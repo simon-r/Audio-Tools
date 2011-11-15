@@ -51,9 +51,10 @@ for i=1:(seg_cnt-1)
 end
 
 r=curr_sam:sizeY(1) ;
-rms(seg_cnt,:) = dr_rms( Y(r,:) ) ;
-peaks(seg_cnt,:) = max( abs( Y(r,:) ) ) ;
-
+if length(r) > 1
+    rms(seg_cnt,:) = dr_rms( Y(r,:) ) ;
+    peaks(seg_cnt,:) = max( abs( Y(r,:) ) ) ;
+end
 
 peaks = sort( peaks ) ;
 rms = sort( rms ) ;
