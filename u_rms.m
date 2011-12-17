@@ -4,7 +4,7 @@ function [ res , dB ] = u_rms( Y , FS , varargin )
 
 p = inputParser ;
 p.addOptional('time_range', [-1 0] ) ;
-p.addOptional('ref', 1 ) ;
+p.addOptional('ref', 1/sqrt(2) ) ;
 
 p.parse(varargin{:});
 

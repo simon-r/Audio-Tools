@@ -33,7 +33,7 @@ for ch=1:size(Y,2)
     
     for i=1:size(Y,1)
         
-        if not( clip_flag ) && ( Y(i,ch) >= level | Y(i,ch) <= -level )
+        if not( clip_flag ) && ( Y(i,ch) >= level || Y(i,ch) <= -level )
             
             clip_flag = true ;
             clip_cnt = clip_cnt + 1 ;
