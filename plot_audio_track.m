@@ -140,7 +140,7 @@ add_toolbar_icon( ht , 'pause.png' , 'Pause' , @pause_play ) ;
     end
 
     function start_play(varargin) 
-        player = audioplayer( Y , FS ) ; 
+        player = audioplayer( Y , FS , 24 ) ; 
         set( player , 'TimerPeriod' , play_delta_time , 'TimerFcn' , ...
             @timer_play , 'StopFcn' , @stop_play ) ;
         start_sample = floor(play_time*FS ) + 1 ;

@@ -101,12 +101,26 @@ classdef AudioTrack < hgsetget
             at.Fs = FS ;
         end
         
+        function rebuild_track( at , varargin )
+            p = inputParser ;
+            p.addParamValue('th', 0.99 , @(x)isnumeric(x) && x < 1 && x > 0 ) ;
+            p.addParamValue('lev', 0.75 , @(x)isnumeric(x) && x < 1 && x > 0 ) ;
+            p.parse(varargin{:});
+            
+            at.Y = rebuild_track( at.Y , at.Fs , p.Results.th ) ;
+            at.Y = normalize( at.Y , at.Fs , p.Results.lev ) ;
+        end
+        
         function [ dB freq h ] = spectral_comparison( at ,  at_ref , time_range , varargin )
             [ dB freq h ] = spectral_comparison( at.Y , at_ref.Y , at.Fs , time_range , varargin ) ;
         end
         
         function [ res , dB ] = u_rms( at , varargin )
             [ res , dB ] = u_rms( at.Y , at.Fs , varargin{:} ) ;
+        end
+        
+        function [ dr14 dB_peak dB_rms ] = compute_dr14( at ) 
+             [ dr14 dB_peak dB_rms ] = compute_DR14( at.Y , at.Fs ) ;
         end
         
         function plot_audio_fft( at , time_range , varargin )
@@ -118,7 +132,7 @@ classdef AudioTrack < hgsetget
         end 
         
         function play( at )
-            at.player = audioplayer( at.Y , at.Fs ) ; 
+            at.player = audioplayer( at.Y , at.Fs , 24 ) ; 
             play ( at.player ) ;
         end
         
