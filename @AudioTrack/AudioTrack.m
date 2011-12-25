@@ -112,7 +112,7 @@ classdef AudioTrack < hgsetget
         end
         
         function [ dB freq h ] = spectral_comparison( at ,  at_ref , time_range , varargin )
-            [ dB freq h ] = spectral_comparison( at.Y , at_ref.Y , at.Fs , time_range , varargin ) ;
+            [ dB freq h ] = spectral_comparison( at.Y , at_ref.Y , at.Fs , time_range , varargin{:} ) ;
         end
         
         function [ res , dB ] = u_rms( at , varargin )

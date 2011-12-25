@@ -9,6 +9,9 @@ if size( varargin , 2 ) >= 2
     elseif strcmpi( varargin{1} , 'smooth_log' )
         smooth_type = 1 ;
         smooth_size = varargin{2} ;
+    elseif strcmpi( varargin{1} , 'no' )
+        smooth_type = -1 ;
+        smooth_size = 30 ;
     end
 else
     smooth_type = -1 ;

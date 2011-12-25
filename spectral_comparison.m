@@ -5,12 +5,16 @@ function [ dB freq h ] = spectral_comparison( Y , Yref , FS , time_range , varar
 p = inputParser ;
 p.addParamValue( 'freq_limit' , [min_freq max_freq] , @(x)isnumeric(x) ) ;
 p.addParamValue( 'plot' , 'no' , @(x)strcmpi(x,'yes') || strcmpi(x,'no') ) ;
-p.parse( varargin{:} );
+p.addParamValue( 'smooth' , 'no' , @(x)strcmpi(x,'smooth_log') || ...
+    strcmpi(x,'smooth_lin') || strcmpi(x,'no') ) ;
+p.addParamValue('smooth_w', 30 , @(x)isnumeric(x) && x > 0 ) ;
+
+p.parse( varargin{:} ) ;
 
 fl = p.Results.freq_limit ;
 
-[com_fft phase freq] = audio_fft( Y , FS , time_range ) ;
-[ref_fft] = audio_fft( Yref , FS , time_range ) ;
+[com_fft phase freq] = audio_fft( Y , FS , time_range , p.Results.smooth , p.Results.smooth_w ) ;
+[ref_fft] = audio_fft( Yref , FS , time_range , p.Results.smooth , p.Results.smooth_w ) ;
 
 phase = [] ;
 
