@@ -3,11 +3,11 @@ function [ d ] = diff_tracks( Y , X , cut )
 %   Detailed explanation goes here
 
 m = 2^16 ;
-
 sX = size( X ) ;
 
 r = cut:sX(1)-cut ;
 
-d = sum( abs(m * X(r,:)  ) - abs( m * Y(r,:) ) ) ;
+d = sum( abs( abs(m * X(r,:)  ) - abs( m * Y(r,:) ) ) ) ;
+
 end
 
