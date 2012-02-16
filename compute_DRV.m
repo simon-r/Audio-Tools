@@ -1,4 +1,4 @@
-function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
+function [ drV dB_peak dB_rms hi ] = compute_DRV( Y , FS )
 %compute_DRV compute the DRV of an audio track
 %   this procedure measure the dynamic vivacity of an audio track.
 %
@@ -7,7 +7,7 @@ function [ drO dB_peak dB_rms hi ] = compute_DRV( Y , FS )
 %       FS: sampling rate 
 %
 % return:
-%   dr14: 'official' dr14 value
+%   drV:  drV value
 %   dB_peak: the largest value of the track (in dB)
 %   dB_rms: the Urms of the track (in dB).
 %
@@ -38,22 +38,19 @@ curr_sam = 1 ;
 
 for i=1:seg_cnt
     r = curr_sam:(curr_sam+block_samples-1) ;
-    for j=1:ch
-        
-        rms(i,j) = decibel_u( u_rms( Y(r,j) , FS ) , 1 ) ;
-        
-        p = decibel_u( max( abs( Y(r,j) ) ) , 1 ) ;
-        peaks(i,j) = p ;
-    end
+    
+    %for j=1:ch
+    rms(i,:) = decibel_u( u_rms( Y(r,:) , FS ) , 1 ) ;    
+    p = decibel_u( max( abs( Y(r,:) ) ) , 1 ) ;
+    peaks(i,:) = p ;
+    %end
+    
     curr_sam = curr_sam + block_samples ;
 end
 
 Ydr = mean ( peaks - rms , 2 ) ;
 
 [n bins] = hist( Ydr , 100 ) ;
-
-hi.on = n ;
-hi.obins = bins ;
 
 max_freq = max( n ) ;
 i = find( n > max_freq*threshold ) ;
@@ -77,7 +74,7 @@ m = sum( n.*bins ) / sum( n ) ;
 
 sdev = sqrt( sum( n.*( bins - m ).^2 ) / sum( n ) ) ;
 
-drO = round ( ( m - 3 ) ) ;
+drV = round ( ( m - 3 ) ) ;
 
 dB_peak = max( max( peaks ) ) ;
 dB_rms = decibel_u( u_rms( sum(Y,2) , FS ) , 1 ) ;
